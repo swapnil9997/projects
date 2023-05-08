@@ -3,6 +3,9 @@ package com.neosoft.ms.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +21,14 @@ public class OrderController {
 
 	@Autowired
 	OrderService orderService;
+
+	@Value("{app.title}")
+	private String title;
+
+	@GetMapping("/data")
+	public ResponseEntity<String> showProductMsg() {
+		return new ResponseEntity<String>("Value of title from Config Server: " + title, HttpStatus.OK);
+	}
 
 	@GetMapping("/order")
 	public List<MyOrder> getAllOrders() {

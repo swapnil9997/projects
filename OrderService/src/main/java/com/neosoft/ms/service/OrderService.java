@@ -12,8 +12,7 @@ import com.neosoft.ms.repository.OrderRepository;
 public class OrderService {
 	
 	@Autowired
-	OrderRepository repo;
-
+	private OrderRepository repo;
 	
 	public Iterable<MyOrder> getMyOrders(){
 		return repo.findAll();
