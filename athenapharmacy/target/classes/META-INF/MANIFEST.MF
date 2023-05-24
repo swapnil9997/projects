@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Built-By: Neosoft
+Build-Jdk: 17.0.6
+Implementation-Title: athena-pharmacy
+Implementation-Version: 1.0.0
+Implementation-Vendor-Id: athena
+Implementation-URL: http://www.example.com
+Created-By: Maven Integration for Eclipse
+
