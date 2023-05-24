@@ -1,0 +1,21 @@
+server:
+  port: 9099
+  
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: "https://techsriman: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@github.com/techsriman/athenaconfigrepo.git"
+          default-label: master 
+          #refresh-rate: 60
+  security:
+    user:
+      name: configadmin
+      password: welcome1
+      roles:
+      - administrator         
+management:
+  endpoint:
+    refresh:
+      enabled: true       
