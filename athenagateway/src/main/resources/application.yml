@@ -1,0 +1,51 @@
+server:
+  port: 7099
+  
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: member_mgmt_route1
+        uri: lb:http://MEMBER-MGMT-SERVICE
+        predicates:
+        - Path=/membermgmtservice/**
+        - Header=env,test
+        - Before=2023-03-20T03:05:39Z
+        - Weight=group1, 8
+        filters:
+        - RewritePath=/membermgmtservice(?<segment>/?.*), $\{segment}
+        - CircuitBreaker=slow
+        - AddRequestHeader=referrer,gateway
+        - AddResponseHeader=domain,memberservice
+      - id: member_mgmt_route2
+        uri: lb:http://MEMBER-MGMT-SERVICE
+        predicates:
+        - Path=/membermgmtservice/**
+        - Header=env,test
+        - Before=2023-03-20T03:05:39Z
+        - Weight=group1, 2               
+        filters:
+        - RewritePath=/membermgmtservice(?<segment>/?.*), $\{segment}
+        - CircuitBreaker=slow
+      - id: insurance_route
+        uri: lb:http://INSURANCE-SERVICE
+        predicates:
+         - Path=/insuranceservice/**
+        filters:
+         - RewritePath=/insuranceservice(?<segment>/?.*), $\{segment}
+         - name: RequestHeader
+           args:
+             name: partner
+             value: gateway
+      - id: pharamacy_route
+        uri: lb:http://PHARAMACY-SERVICE
+        predicates:
+         - Path=/pharamacyservice/**
+        filters:
+         - RewritePath=/pharamacyservice(?<segment>/?.*), $\{segment}
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8889/eureka,http://localhost:8888/eureka            
