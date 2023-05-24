@@ -1,0 +1,10 @@
+spring:
+  main:
+    web-application-type: none
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8889/eureka,http://localhost:8888/eureka
+          
