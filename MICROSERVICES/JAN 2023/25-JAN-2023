@@ -1,0 +1,172 @@
+Cloud ConfigServer:
+Cloud ConfigServer is used for centralizing and distributing the configuration of microservices across the network. 
+
+Let us try to analyze without Spring Cloud ConfigServer, if we have to accomplish it what we need?
+In order to centralize and distribute the configuration over the network, we need to build an ConfigServer Http Endpoint that will receive the request over the network and dispatches the microservice configuration as an YML/properties file back
+
+To the ConfigServer Endpoint we need to pass the location of the configuration file or a repo as an input, so that during the time bootup it goto the repo location read all the configurations and load and cache it in-memory, so that it can distribute the configuration upon the request
+
+How does the ConfigServer knows which configuration is pertaining to which Microservice, and how does the ConfigServer Endpoint knows who is the microservice requesting?
+1. Each Microservice application must and should be associated with a unique name from other microservices
+2. While the microservice application goes to the ConfigServer requesting the configuration, it should pass the name as an input to the ConfigServer Endpoint requesting the configuration, so that ConfigServer can identify which application or microservice is requesting the configuration
+3. For each microservice the relevant configuration should be written in the corresponding application.yml|properties file and place in config repo, so that ConfigServer Endpoint can identify which configuration belongs to which microservice and can dispatch it easily
+
+Taking the above things into consideration, we need to write an ConfigServer HttpEndpoint. But it looks like every microservice application requires ConfigServer component to distribute the configuration, which seems to be a common functionality. So instead of we writing the ConfigServer Endpoint, the spring has provided ConfigServer as part of Spring Cloud Module
+
+
+Now we need to build an Spring mvc application, in which we need to configure 
+1. DispatcherServlet, ContextLoaderListener
+2. HandlingMapping, Message Converters
+3. Configure ConfigServer Controller class provided by Spring Cloud people as a bean definition, and should add relevant mapping for receiving the request and dispatching it to ConfigServer controller
+4. package the application and deploy it on the Servlet Container
+5. Additionally to the ConfigServer controller we need to pass configRepo location to read the configuration
+
+
+From the above itseems even through Spring Cloud has provided the necessary API to host, distribute the configuration, to use it we need to spend lot of time in configuring the framework components in dispatching the request, instead of this we can take the advantage of Spring Boot & AutoConfigurations
+
+If we using spring boot, then all the spring mvc components are autoconfigured
+1. DispatcherServlet/ContextLoaderListener will be taken care by AnnotationConfigServletWebServerApplicationContext
+2. HandlerMapping and MessageConverters are configured by the AutoConfiguration classes
+3. The application is packaged as a boot executable jar and deployed on embedded servlet container
+
+The only thing we need to do is configure ConfigServer Endpoint as a bean definition in spring application class, so that it can receive the request and dispatch configuration
+
+
+How to run the ConfigServer using Spring Cloud + Spring Boot?
+#1. Setup ConfigRepo with Microservice Configurations
+1. we can use a directory on the Filesystem of our computer as an ConfigRepo, as we need to do is create an empty directory and initialize the git repository in it
+d:\configrepo
+git init
+
+2. place the microservice configuration inside the d:\configrepo directory, for eg.. pharmacy microservice configuration should be placed in d:\configrepo with name pharmacy-service.yml given the name of the microservice application is pharmacy-service
+
+d:\configrepo
+|-pharmacy-service.yml
+
+here we dont need to write the entire configuration of pharmacy microservice, identify which configurations might change, and add those configurations only in this yaml file so that the changes can be distributed easily
+
+#2. setup an spring boot, spring cloud application to host ConfigServer Endpoint
+
+ConfigServerApplication
+|-src
+  |-main
+		|-java
+			|-ConfigServerApplication.java
+		|-resources
+		  |-application.yml
+|-pom.xml
+  - parent: org.springframework.boot:spring-boot-starter-parent:2.7.3
+		dependencies:
+			spring-boot-starter
+			spring-cloud-config-server
+
+
+@SpringBootApplication
+@EnableConfigServer
+class ConfigServerApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(ConfigServerApplication.class, args);
+	}
+}
+
+application.yml
+-----------------
+server:
+	port: 8088
+spring:
+	cloud:
+		config:
+			server:
+				git:
+					uri:
+						- file://${user.home}/configrepo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	

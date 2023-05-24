@@ -1,0 +1,82 @@
+Client-Side Loadbalancer
+-------------------------
+when the client application is trying to access the Microservices, the traffic from the client application must be distributed across all the replicas of the microservice, unless otherwise one of the instance will be overloaded or bomborded and eventually gets crashed.
+	
+How to distribute the client application traffic	across all the instances of the microservice?
+#1. server-side load balancer
+we cannot use server-side loadbalance for distributing the client-application requests, because the server-side loadbalancer dont know which nodes are running with what services to distribute the request to the microservice instances. it only loadbalances the requests across all the nodes registered using round-robin or any other algorithm.
+From the above we can understand we cannot use an centralized loadbalancer in distributing the client requests to the instances of the microservice
+
+#2.per microservice / per loadbalancer server-side
+per each type of microservice, we can create one loadbalancer registering all the service instances that are running on the cluster so that the request received by the loadbalancer will be distributed to all the nodes that are registered.
+	
+in this solution if we have #5 types of microservices, we need 5 loadbalancers at the server-side, where per each loadbalancer we need to register all the instances of the pertaining microservice.
+with this approach we have lot of problems:
+1. The cost of running the application goes quite high, since we need multiple loadbalancers and ensure HA for them as well
+2. since the microservices are dynamic and would scale-out/scale-in on fly maintaining the loadbalancers and registering the latest instances into loadbalancer is not manageable, to avoid this only we are using eureka server
+
+From this we can understand this approach is in-feasible, since the servies are dynamic and cannot be configured to be registered manually into loadbalancer
+
+its not that the server knows how many instances of the microservice is running, even the client would find this information through eureka discovery server, the easiest way to distribute the client application traffic across the instances of the service is apply the load-balancing at the client-side
+
+So that the client itself will be responsible for distributing the traffic for an microservice across all the instances on which it is running.
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

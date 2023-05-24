@@ -1,0 +1,107 @@
+How to work with spring boot profiles while using cloud configserver?
+spring profile:
+our application will be moved across various different environments right from the development to production. For different environments in which our application will be running, the configuration information needs to be modified based on that env.
+	
+Instead of modifying the configuration information pertaining to that env while running the application we can create multiple copies of the configuration pertaining to each env, and use it while deploying or running the application on that env using the help of spring profiles
+
+In spring boot we write the configuration information in application.yml, the SpringApplication class when we call
+	SpringApplication.run(Config.class, args)
+will read the application.yml from the classpath of our project and creates the ioc container and bootup the application.
+	
+But to support working with various different environments, Spring boot has designed SpringApplication class to load the configuration specific to the env under which we are running the application. This can be accomplished as below.
+	default: application.yml #common configuration which doesnt change
+	per each environment, create an env specific configuration file with naming convention as application-profileName.yml|properties
+	For eg.. application-dev.yml or application-test.yml etc
+	
+In case of yml we can write multiple env specific configuration in one single yml file
+application.yml
+----------------
+spring:
+	profile:
+		active: dev
+---
+spring:
+	config: 
+		active:
+			on-profile: dev
+	datasource:
+		url:
+		username:
+		password		
+...
+---
+spring:
+	config: 
+		active:
+			on-profile: test
+	datasource:
+		url: jdbc:mysql://localhost:3306/testdb
+		username: testuser
+		password: welcome1
+...
+-----------------------------------------------------------------------------------------------------------------------------------
+
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

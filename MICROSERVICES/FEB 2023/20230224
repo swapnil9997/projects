@@ -1,0 +1,253 @@
+What is Circuit breaker?
+Circuit breaker is one of the integration-tier related design pattern, it is used for protecting the client applications from the slow/unresponsive remote services
+The Circuit breaker is not belongs to Spring Framework or something that is only applied to microservices technology. It is an independent design pattern of its own and can be applied anywhere when an client application is trying to access an remote service.
+For eg.. we can use it while accessing an
+1. rmi
+2. ejb
+3. soap service
+4. restful / http endpoint 
+aswell
+
+Whenever an client application is trying to access an remote service for consuming the functionality, sometimes due to various reason the remote service could become unresponsive or my be slow in serving the requests
+
+The remote service could be unresponsive due to heavy traffic or load / it might be accessing another remote system which seems to slow due to drained system resources etc
+
+At this point of time if the client application is allowed to access the remote service, it creates lot of problems at the client application:
+problems:
+1. The client application would be sending the requests to the un-responsive remote service waiting for the response from the remote service for longer amount of time which would block threads at the client application and results in consumses huge system resources at the client side
+2. due to the longer wait times, the requests at the client application would result in timeout exceptions after holding the system resources for longer amount of time
+3. during this time while the requests at the client application is waiting for an response from the slow running remote service, if the traffic at the client application increases, then more and more threads would be running into waiting state consumes heavy system resources which could leads to crash of the client application
+4. The post effect of accessing the unresponsive remote service not only affects the client application, it shows an cascading effect on the other  clients who are accessing the client application aswell
+5. at some point of time if more and more number of client applications are sending the requests to the unresponsive remote service, it would result in crash remote service as well
+
+How to resolve this problem?
+Whenever the client application has detected an remote service is unresponsive or taking more time in returning the response, the client application has to immediately cut the chord of the current request that is taking more time and should block subsequent requests from the client to the slow/unresponse remote service for certain amount of time allowing the remote application to recover. 
+during this time all the requests from the client to the remote service will be terminated locally without blocking the threads at the client-side which would not leads to unnecessary resource usage or crash of the application. After certain interval of time again the client application can allow the requests to the remote service conditionally. This can be achived through Circuit breaker design pattern
+
+How to implement circuit breaker design pattern?
+
+#10 requests for #10 members	
+
+class MemberApiInvoker {
+	int failureCount = 0;
+	int failureThreshold = 3;
+	int interval = 10;
+	int openStartInMs = 0;
+	boolean open = false;
+	
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	public MemberInfo getMember(int memberNo) {
+		MemberInfo memberInfo = null;
+		UriComponentBuilder builder = UriComponentBuilder.fromUriString("http://localhost:8080/member/{memberNo}/details");
+		Map pathVariables = new HashMap();
+		pathVariables.put("memberNo", memberNo);
+		URI resourceURI =builder.build(pathVariables);
+		
+		try { // 8:21:23
+			if(open == true) {
+				long ct = Calendar.getTimeInMilliseconds();
+				if((ct - openStartInMs) / 1000) >= interval) {
+					open = false;
+					failureCount = 0;
+				}
+			}
+			
+			if(failureCount < failureThreadShold)  { //closed
+				MemberInfo memberInfo restTemplate.getForObject(resourceURI, MemberInfo.class); // slow
+			} else {
+				if(open == false) {
+					open = true;
+					openStartInMs = Calendar.getTimeInMilliseconds(); 8:20:22
+				}				
+			}
+			if(open) {
+				throw new CircuitOpenException();
+			}
+		}catch(Throwable t) {
+			failureCount++;
+		}
+		
+		
+		return memberInfo;
+	}
+}	
+
+
+
+interface Invocation {
+	Object invoke();
+}
+
+class CircuitBreaker {
+	int failureCount = 0;
+	int failureThreshold = 3;
+	int interval = 10;
+	int openStateInMilliSeconds = 0;
+	boolean open = false;
+	
+	public Object invoke(Invocation invocation) {
+		Object response = null;
+		
+		try {
+			if(open == true) {
+				long ct = Calendar.getTimeInMilliseconds();
+				if((ct - openStateInMilliSeconds) / 1000) >= interval) {
+					open = false;
+					failureCount = 0;
+				}
+			}
+			
+			if(failureCount < failureThreadShold)  { 
+				object = invocation.invoke();
+			} else {
+				if(open == false) {
+					open = true;
+					openStateInMilliSeconds = Calendar.getTimeInMilliseconds(); 8:20:22
+				}				
+			}
+			if(open) {
+				throw new CircuitOpenException();
+			}	
+		}catch(Throwable t) {
+			failureCount++;
+			throw t;
+		}
+		
+		return object;
+	}
+	
+}
+
+class MemberApiInvoker {
+	@Autowired
+	private CircuitBreaker circuitBreaker;
+	
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	public MemberInfo getMember(int memberNo) {
+		MemberInfo memberInfo = null;
+		
+		
+		memberInfo = circuitBreaker.invoke(new Invocation() {
+			MemberInfo memberInfo = null;
+			UriComponentBuilder builder = UriComponentBuilder.fromUriString("http://localhost:8080/member/{memberNo}/details");
+			Map pathVariables = new HashMap();
+			pathVariables.put("memberNo", memberNo);
+			URI resourceURI =builder.build(pathVariables);
+			MemberInfo memberInfo =  restTemplate.getForObject(resourceURI, MemberInfo.class);
+		});
+		
+		return memberInfo;
+	}
+	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,136 @@
+Spring Cloud CircuitBreaker
+Spring Cloud CircuitBreaker is an module provided by the Spring cloud which acts as an wrapper ontop of the third-party libraries available in the market
+
+Spring Cloud CircuitBreaker has provided an interface 
+
+interface CircuitBreaker {
+	Object run(Supplier s);
+	Object run(Supplier s, Function<Throwable> f);
+}
+
+for each third-party library it supports it has provided an implementation of the CircuitBreaker interface in that implementation class, it wraps the vendor provided CircuitBreaker api class in enforcing the CircuitBreaker functionality
+	
+	
+class Resilience4JCircuitBreaker implements CircuitBreaker {
+	Object run(Supplier s, Function<Throwable> f) {
+		// here it has the logic for invoking Resilience4J CircuitBreaker api class
+	}
+}	
+	
+in this way for each vendor, the Spring Cloud has provided one implementation class implementing the CircuitBreaker interface
+	
+To instantiate the vendor CircuitBreaker interface implementation object, the Spring Cloud has adopted Abstract Factory design pattern. they have provided an Abstract Factory class 
+	
+abstract class CircuitBreakerFactory {
+	CircuitBreaker create(String id);
+}	
+For each vendor implementation they have provided an implementation for the Abstract Factory class. The implementation factory takes care of instantiating vendor api class and wraps into the Spring Cloud CircuitBreaker implementation class.
+	
+class Resilience4JCircuitBreakerFactory extends CircuitBreakerFactory {
+	CircuitBreaker create(String id) {
+		// instantiate the vendor CircuitBreaker api object 
+		// then instantiates spring cloud CircuitBreaker implementation and wraps the Vendor CircuitBreaker object inside it
+	}
+}	
+	
+Always the factories takes care of instantiating the objects of another class with default values, so here also the Vendor implementation factory takes care of creating the CircuitBreaker implementation object with default configurations. So to create the object of CircuitBreaker we need to call create() method on CircuitBreakerFactory as below.
+	
+CircuitBreakerFactory circuitBreakerFactory = new Resilience4JCircuitBreakerFactory();
+CircuitBreaker circuitBreaker = circuitBreakerFactory.createCircuitBreaker("default");
+
+From the above we can understand, first we need to instantiate vendor implementation object of the CircuitBreakerFactory and call create method on it to get CircuitBreaker object, but we dont need to create the Vendor Factory object directly
+
+Because when we add relevant spring boot starter-dependency into our project for eg.. spring-cloud-starter-resilience4j-circuitbreaker, the autoconfiguration classes takes care of instantiating the vendor implementation factory and places the bean definition inside the ioc container
+
+
+So in our client application we can directly inject CircuitBreakerFactory object through auto-wiring
+
+class MemberMgmtApiInvoker {
+  @Autowired
+	private CircuitBreakerFactory circuitBreakerFactory;
+	
+	public MemberInfo getMember(int memberNo) {
+		CircuitBreaker cb = circuitBreakerFactory.create("default");
+		MemberInfo memberInfo = cb.run(()-> {
+			// write the code for invoking the remote api
+		});
+		return memberInfo;	
+	}
+}
+
+In future if we wanted to switch to another vendor, we just only need to change the starter dependencies, we dont have to modify one single line of code.
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

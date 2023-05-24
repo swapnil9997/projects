@@ -1,0 +1,63 @@
+How to reload the configuration changes across the microservice applications?
+The purpose of ConfigServer is to centralize and distribute the microservice application configurations across the different instances running over the network, so that any changes in the configuration doesnt affect the microservice application.
+	
+In case of change in configurations, we dont need to rebuild, repackage and redeploy or restart the microservice applications.
+	
+How to achieve propogating the configuration changes across microservice applications?
+#1 ConfigServer
+Whenever there is a change in configuration files of the configrepo (gitrepository), the ConfigServer will reload them either upon receiving the request or based on the refresh-rate automatically, we dont need to restart the ConfigServer to pull the modified configuration files.
+	
+#2. Microservice application
+during the time of bootstrapping the microservice application, the Configuration information would be pulled and loaded into ioc container and boots the application. 
+There after any configuration changes that takes place in the ConfigRepo pertaining to the Microservice application, the application will not be aware of it and would not attempt to reload them, so such changes will not be reflected automatically.
+	
+So whenever there is a change in microservice configuration in the ConfigRepo, we need to explicitly trigger or notify the Microservice application indicating there is a change in the Microservice configuration, pull and reload the components of our application.
+	
+How can we notify the Microservice application about the change in the Configuration?
+That is where spring boot actuator has provided an refresh endpoint, that should be triggered explicitly asking the beans to be reloaded with the latest configuration changes
+
+by default the refresh endpoint is not enabled and exposed, we need to enable & expose the endpoint in microservice application to notify the change in configuration
+management:
+  endpoint:
+    refresh:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+          - refresh
+					
+What will happen when we trigger the refresh Endpoint?
+we need to send the request [POST] http://host:port/actuator/refresh
+upon triggering or sending an refresh request, the microservice application will not be restarted, rather the bootstrap context will be reloaded with latest configuration by pulling it from ConfigRepo and the bean definitions will be reloaded within the ioc container. we can image this as an in-memory refresh of the components
+
+since there are many bean definitions in the ioc container, reloading them is a great penalty which is equal to restarting the application. Instead we need to tell the ioc container, the bean definitions that should be reloaded upon a refresh request by annotating them using @Refresh
+
+For the bean definitions for whom we are injecting the values using @ConfigurationProperties, we dont need to write @Refresh annotation, those beans are automatically marked for reload
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

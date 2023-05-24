@@ -1,0 +1,172 @@
+Spring Cloud Gateway
+---------------------
+There are several common cross-cutting concerns are there while designing an distributed solution like microservices like
+1. security
+2. routing
+3. logging
+4. auditing
+5. caching 
+etc
+
+These are all the common requirements that has to be applied for each microservice of our application.
+When the microservices are accessed by the client applications, the services inorder to be accessed they need to be
+1. discovered
+2. loadbalanced
+
+The client applications can be an server/backend client applications build on programming languages like java, .net or ruby etc or could be UI technologies driven clients like ReactJS, AngularJS etc. So enabling the access to the microservices by implementing discovery and loadbalance at the client-side is not possible for few technology clients
+
+implementing these common aspects for each service becomes quite tedious job and difficult to manage, that is where spring cloud gateway needs to be used.
+	
+The Spring Cloud Gateway acts as an common entrypoint into the system, every request that is send by the client application would be received by the Spring Cloud Gateway only.
+upon receiving the request, we can enforce the common aspects before forwarding the request to the microservice endpoints like
+1. security
+2. logging
+3. discovery
+4. loadbalancing
+5. caching
+etc
+
+There are lot of third-party vendors provided different libraries for implementing the gateway for an microservice application
+1. Zuul
+2. ApiGee
+3. Kong
+etc
+In addition to the above spring cloud has provided their own cloud gateway which is implemented on reactive api stack.
+	
+the spring cloud gateway offeres 3 features
+1. routing
+2. transformation
+3. security through spring security module
+
+
+What is the Architecture of Spring Cloud Gateway?
+Whenever the client application has send the request, the request will be received by the spring cloud gateway. upon receiving the request it determines the matching route to whom the request should be dispatched by looking into Gateway Handler Mapping and dispatches the request to Gateway Web Handler.
+	
+The Gateway Web Handler runs the requests through a filter chain that is specific to the request and then dispatches the request to the endpoint. upon gathering the response, the cloud gateway web handler executes the response filters and dispatches the response to the client application
+during the course of request or response the Filters can modify the request as well as response also if it is necessary.
+	
+There are 3 main/major components are there in Spring Cloud Gateway
+1. Route
+
+2. Predicate
+
+3. Filter
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

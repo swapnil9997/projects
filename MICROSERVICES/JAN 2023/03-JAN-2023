@@ -1,0 +1,110 @@
+What are the dis-advantages or drawbacks of developing an application based on monolithic application architecture?
+1. overloaded IDEs
+2. overloaded Server Runtimes
+3. Difficult to achieve modularity and code reusability
+4. Due to huge in nature developers will be afraid of understand the application to work with, which results in poor quality of code being delivered
+5. monolithic applications are not easily scaled
+	1. supports only horizantal scaling
+	2. cannot distribute system resources across the modules of the application based on their requirement
+	3. cost of scalability is quite high
+6. we cannot achieve continous integration and continous deployment due to its huge in size
+7. we cannot scaleup the development team
+	if application grows bigger we need more resources to work on it, but we cannot manage them all at once so we need to break them into teams
+	1. if the teams are working independently on each module, ensuring the compatibility between the deliveries of these teams are very difficult
+	2. one team has to wait for other teams to complete their development to have the release to be taken place
+	3. upfront planning is required in cooridinating and delivering the application releases
+8. long-term commitment to the technology stack
+------------------------------------------------------------------------------------------------------------------------
+How to develop an microservices application?
+The large scale enterprise application is broken down into smaller microservices applications based on few charecteristics:
+1. loosely coupled
+2. independently deployable
+3. highly scalable
+4. resilient
+5. mutually collaborative services
+that can be developed by independent collaborating teams
+
+#1. How to identify and break the application into Microservices?
+The large-scale application is not broken down into microservices based on per-module of the application, there are various design aspects need to be taken into consideration inorder to identify and break the application into microservices.
+	
+#2. How can the microservices independently deployable?
+2.1 How to make the microservices independent of each other?
+Each microservice should be build out of its own sourcecode project independent of the others. No 2 microservices applications should have classpath references or library dependencies with each other, because if we use an microservice application as a library dependency with another, we cannot build or deploy our microservice application independent of the other one
+
+2.2 How can we resuse the functionality across the microservices, if those are developed independently (without referring them through library references)?
+These microservices are exposed as HTTP/REST endpoints, so the can reuse the functionality between them via api calls only
+
+2.3 Why we want these microservices to be independently deployable?
+There are plenty of advantages by having them to be loosely-coupled and independently deployable
+1. we can plan, organize and conduct development of the application by breaking the development team into smaller groups since each microservice has its own sourcecode project
+2. we can plan, develop and release the modules independently without bothering about other modules
+3. Each module can be deployed/upgraded/patched independently without affecting the availability of the other modules
+4. Each module/microservice can be scaled independently 
+5. Failures can be isolated due to independent deployments
+
+#3. Why do we want microservices to be completely loosely-coupled?
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

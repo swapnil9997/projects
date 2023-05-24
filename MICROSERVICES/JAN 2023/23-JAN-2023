@@ -1,0 +1,53 @@
+What is Spring Cloud ConfigServer, what is the purpose of it?
+While working on Microservices applications, the multiple instances of the application will be deployed and distributed across the cluster. In these applications if we are packaging the configuration information of the application within the application itself (for eg.. application.yml|properties), we will run into several problems
+1. everytime where there is an change in the configuration, we need to modify the sourcecode of the application, which requires rebuilding, repackaging and redeploy the application across the cluster which requires huge efforts
+2. we need to identify the instances of the application where those are running across the cluster and should replace them with new version of the artifact which is an tedious job
+3. if we are running the application in a containerized env, a newer version of the application artifact requires rebuilding the docker image which requires significant effort and time in building the image
+4. the development team and devops team needs to coordinate in rolling the changes onto the env 
+5. we should adopt an rolling strategy while releasing the newer version of the artifact to avoid the down time
+
+From this we can understand a small change in the configuration requires huge amount of time, effort and coordination across the teams in rolling the changes
+
+To overcome the above problem Spring cloud has provided Cloud ConfigServer and ConfigClient
+
+#1. Spring Cloud ConfigServer
+Spring Cloud ConfigServer helps us in centralizing the configuration of microservices applications and distribute the configuration across each microservice over the network
+
+
+Pharmacy
+[api]
+DrugService
+Drug getDrug(String drugName) {}
+
+
+
+pharmacy
+drug
+drug_id   drug_name   manufacturer   generic_name   category   composition   mfg_dt   batch_no   expiry_dt  price
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

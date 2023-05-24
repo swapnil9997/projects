@@ -1,0 +1,252 @@
+How to integrate microservice application with spring cloud configserver?
+athena-pharmacy
+|-src
+	|-main
+		|-java
+		|-resources
+			|-application.yml
+			|-bootstrap.yml
+|-pom.xml
+
+To work with pulling the microservice configuration from configserver and boostrap the application we need to add 2 starter dependencies in our project
+spring-cloud-config-client
+spring-cloud-starter-bootstrap
+
+note:-
+in the earlier verions of the spring-cloud-config-client, the spring-cloud-starter-bootstrap is an transitive dependency. but in the latest releases of the spring-cloud the spring-cloud-starter-bootstrap is not added as an transitive dependency, so we need to explicitly add as an dependency into our project
+
+In Spring Cloud 3.x they are provided spring-cloud-starter-config, this is an spring boot starter dependency, that pulls the spring-cloud-config-client but not spring-cloud-starter-bootstrap
+
+spring-cloud-starter-bootstrap during the bootstrap of the application looks for bootstrap.yml under the classpath of our project, if not found it looks for application.properties/yml under the classpath.
+	
+It is adviced to write bootstrap.yml apart from application.yml|properties file. by placing them separately we have few advantages:
+1. we can differentiate or separate the application configuration from bootstrap configuration that loads the external configuration from configServer
+2. in future if we dont want to load the external configuration from configServer we can remove bootstrap.yml without loosing the application configuration
+
+in the bootstrap.yml we need to specify the cloud configserver uri, allowing the cloud config client to pull the configuration from configserver
+
+bootstrap.yml
+spring:
+	config:
+		import:
+			- configserver:http://host:port
+
+in addition to the configserver url, we can write file: and classpath: also so that we can load external configuration during the bootstrap of our application through file or classpath of the project
+
+For eg.. we may have an yml/properties file in d:\ of our machine this can also be loaded into bootstrap context ioc container during the bootup by adding it as config import in bootstrap.yml as below
+
+bootstrap.yml
+spring:
+	config:
+		import:
+			- configserver:http://localhost:9099
+			- file:d:/appconfig.yml
+			
+in addition to the spring.config.import we need to specify spring.application.name in the application.properties|yml file, so that bootstrap can pull the configuration from ConfigServer pertaining to our application. In case if we dont specify the spring.application.name , then it looks for default file with name "application.yml" from config server
+-----------------------------------------------------------------------------------------------------------------------------------
+Cloud ConfigServer
+How does the ConfigServer loads and serves the configuration to the Microservice applications?
+	
+For every request to ConfigServer requesting the microservice configuration, the ConfigServer takes the applicationName as an input and goes to the repository location we specified locating the relevant configurationfile based on the name, reads and returns the configuration as a response to the request
+
+we can specify the config location as:
+1. local git repository location
+2. remote git uri
+
+First-time when the request for configuration has been received by the ConfigServer, it goes to the remote/local git repository locates the configuration file (pertaining to applicationName), read it and loads into the memory (local cache) and serves it as an response back to the Microservice application/client
+
+In the subsequent requests, per each request the client has send, the ConfigServer goes to git local/remote repository and performs an git fetch to see are there are any new commits onthe repository than the last loaded commit configuration, if there are new commits than the previous read, it reloads the configuration from the repository stores in cache and serves as a response back to the client.
+	
+For each request executing an git fetch operation is costly job, this can be avoided by configuration refresh-rate. upon configuring the refresh-rate, the ConfigServer avoid perform git fetch for every request, rather based on refresh-rate it periodically loads the configuration from the git local/remote repository based on new commits
+
+ConfigServer Application
+athenaconfigserver
+|-src
+	|-main
+		|-java
+		|-resources
+			|-application.yml
+|-pom.xml
+
+application.yml
+spring:
+	cloud:
+		config:
+			server:
+				git:
+					uri: 
+						- "file://absolutepath pointing to git directory"
+						- "gitRepositoryURI"	
+						- "https://username:pattoken@github.com/repo.git"
+					refresh-rate: 180
+					default-label: master
+					
+In addition we need to specify the branch name of the git repository from where the configuration files has to be lookedup by using default-label: branchName. 
+-----------------------------------------------------------------------------------------------------------------------------------
+How to secure the access to the Cloud ConfigServer?
+We dont want the Cloud ConfigServer to be exposed and access to everyone, because it contains microservices application configuration, that should be kept secured, this can be achieved by enabling spring security basic authentication.
+	
+#1. add spring-boot-starter-security dependency into the maven project.
+when we enable spring-boot-starter-security dependency, the spring security components will be auto-configured through spring boot echosystem.	By default during the server startup, the spring boot starter security generates an default username: user and password as random number in the console. But it would be helpful for using them in integrating the microservice, because a restart of ConfigServer will regenerate the password, thus making me change even microservice application as well.
+	
+So we can configure a static username/password for ConfigServer using below security configuation in application.yml
+
+security:
+	user:
+		name: configadmin
+		password: welcome1
+		role: administrator
+----------------------------------------------------------------------------------------------------------------------------------
+How to pull the configuration from ConfigServer upon enforcing or enabling the security in a Microservice application?
+By default spring-cloud-config-client supports sending basic authentication headers aspart of the request in authenticating with ConfigServer, we just need to provider username/password to the ConfigClient api as below.
+			
+bootstrap.yml
+spring:
+	cloud:
+		config:
+			username: configadmin
+			password: welcome1
+	config:
+		import:
+			- configserver:http://localhost:9099
+-----------------------------------------------------------------------------------------------------------------------------------
+	
+1. how to detect and reload the microservice configuration changes from ConfigServer into Microservice application?	
+2. how to work with spring boot profile specific configuration
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

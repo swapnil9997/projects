@@ -1,0 +1,201 @@
+How does the client applications access the Microservices hosted on the Cluster?
+The client application can be anything, it could be
+1. core application
+2. web application
+3. another service 
+irrespectively they can access the microservice because the Microservice is inter-operable.
+	
+The Microservices are distributed across the cluster of machines and the client dont know on which nodes these microservices are running. Since all the microservices are registered with Discovery Server (Eureka), the client application has to talk to the eureka server to identify the location where the service is running.
+	
+every microservice by itself register with eureka server with serviceName, so the client has to locate/discover the microservice using the serviceName by going to eurekaServer
+
+In order to talk to the eureka Server the client application needs to write logic for invoking the eureka server apis for discovering services, instead the Netflix team has provided Discovery Client api
+
+Discovery Client Api
+Discovery Client Api helps the client application to communicate and discover the microservice through Eureka Server , but Discover Client api will not help us to access the endpoint (microservice), we still need to use RestTemplate component for accessing the end service
+
+
+PharmacyStoreClient
+|-src
+  |-main
+	  |-java
+			|-PharmacyStoreApplication.java
+		|-resources
+			|-application.yaml
+|-pom.xml
+  |-spring-boot-starter-eureka-client - #DiscoveryClient
+  |-spring-boot-starter-web           - #RestTemplate
+	
+	
+PharmacyService -> ROOTURL = PHARAMACY-SERVICE = http://localhost:8081
+
+/drug
+DrugApiController
+ /{drugName}/
+ List<DrugDetailsDto> findDrugs(@PathVariable("drugName")
+																
+application.yml
+---------------
+eureka:
+  client:
+    register-with-eureka: false
+		fetch-registry: true
+		service-url:
+      defaultZone: http://localhost:8889/eureka, http://localhost:8888/eureka																   
+	
+@SpringBootApplication	
+@EnableDiscoveryClient																
+class PharmacyStoreApplication {
+	public static void main(String[] args) {
+		ApplicationContext applicationContext = SpringApplication.run(PharmacyStoreApplication.class, args);
+		
+		DrugSearchService dss = applicationContext.getBean(DrugSearchService.class);
+		List<DrugInfo> drugs = dss.searchDrug("paracetmal");
+		
+	}
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
+	
+}																
+
+
+@Service																
+class DrugSearchService {
+	@Autowired
+	DiscoveryClient discoveryClient;
+	
+	@Autowired
+	RestTemplate restTemplate;
+	
+	List<DrugInfo> searchDrug(String drugName) {
+		List<ServiceInstance> instances = discoveryClient.getInstances("PHARMACY-SERVICE");
+		ServiceInstance instance = instances.get(0);
+		String hostName = instance.getHost();
+		int port = instance.getPort();
+		String endpointURL = "http://"+host+":"+port"/drug/{drugName}";
+		Map<String, String> paramMap = new HashMap();
+		paramMap.put("drugName", drugName);
+		String url = UriComponentBuilder.fromUri(endpointUrl).uriVariables(paramMap).build().toString();
+		String response = restTemplate.getForEntity(url, String.class);
+		
+	}
+}																
+																
+																
+																
+																
+																
+																
+																
+																
+																
+																
+																
+																
+																
+																
+																
+																
+																
+																
+																
+	
+	
+																
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

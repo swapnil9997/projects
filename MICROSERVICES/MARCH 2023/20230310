@@ -1,0 +1,205 @@
+Api gateway
+There are lot of common requirements that has to be applied or cross-cutting concerns that has to be applied across all the microservices like
+1. loadbalancing
+2. service discovery
+3. security
+4. logging
+5. tracing
+6. caching
+etc
+rather than implementing them at each microservice, we can have them applied centrally across all the services through api gateway.
+	
+An api gateway should support 3 functionalities / features	
+1. Routing = upon receiving the request, the api gateway should identify the request is for which downstream service and should route the request to the appropriate microservice application
+
+2. Filtering = applying the pre-processing and post-processing of the request/response before it has been dispatched to downstream service or after gathering the response from down stream system but before it is returned to the client
+	
+3. Predicate (Conditional Routing) = support conditional based routing of the request to the backed/downstream systems
+
+
+There are lot of third-party vendors provided different libraries for implementing api gateway like
+1. Zuul
+2. ApiGee
+3. Kong
+4. Spring Cloud Gateway
+
+#4. Spring Cloud Gateway
+Spring Cloud Gateway is an proxy service often used in microservices based applications. It centralizes the request in a single entrypoint and routes them to the proper downstream services. 
+	
+There are #3 main components are there in Spring Cloud Gateway
+1. Route
+2. Predicate
+3. Filters
+
+How to work with Spring Cloud Gateway?
+1. per each microservice to be exposed and accessible by the client application through api gateway, developer has to define an appropriate route configuration enabling the gateway to receive the request onbehalf of the microservice, and route it to the relevant microservice application
+These mappings the developer writes in routing the incoming request to the appropriate downstream service is called "route configurations" or even Gateway Mappings
+
+2. we can bind conditions called "predicates" indicating when does this route should be choosen or used for forwarding to the downstream service
+for eg.. 
+There are different types of predicates are supported
+2.1 before time predicate
+2.2 after time predicate
+2.3 between time predicate
+2.4 Cookie Predicate
+2.5 Header Predicate
+2.6 Host Predicate
+2.7 Path Predicate
+2.8 Query Predicate
+2.9 Weight Predicate
+The Spring cloud gateway has provided several inbuilt or predefined predicates that can be attached to the route defining when does route should be choose or used
+
+
+3. aspart of routing the request and dispatching the response based on the route to the downstream or proxied service we may want to perform additional pre/post operations like
+1. Adding Request Headers
+2. Adding Response Headers
+3. Removing Request Header
+4. Removing Response Header
+5. RewritePath
+6. Map RequestHeader
+7. Prefix Path
+8. Modifying the Request
+9. Modifying the Response
+etc
+performing these request/response manipulations can be done through Filters
+Irrespective of the microservice application there are few common operations we wanted to perform during request/response like
+1. Adding or Removing Request Headers
+2. Mapping the Request Headers
+3. Rewriting the Request URLS
+4. Appending the Query Parameters
+etc
+seems to be common for every application, so there are pre-defined Filters provided by Spring Cloud Gateway itself that can be associated to a Route for carrying the common operations
+
+From the above a route configuration is associated with #2 things
+1. Predicate
+2. Filters
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

@@ -1,0 +1,168 @@
+Discovery Server/Registry
+-------------------------
+The Microservice applications are scattered and distributed across the nodes of the cluster and all the nodes of the cluster or not symmetric, different microservices runs on different nodes of the cluster, in such case we cannot use an loadbalancer in distributing the incomming traffic to the nodes of the cluster
+
+even the client application doesnt know which microservices are running on which nodes of the cluster. To help us in identifying and locating the microservices on the cluster we need discovery server
+
+A typical discovery server or a registry has to provide below things in registring and discovering the services:
+1. The discovery server should provide an registration endpoint, thereby which the microservice applications should register themself by publishing their information to the discovery server indicating their availability
+2. discovery server should keep track of the replicas of the microservice instances rather than treating them as different services, so that it provide the details to the client application when requested, so that client can loadbalance the request
+3. The discovery server should support discovering the microservice application through some identification like a Name of the service
+4. the discovery server should support heartbeats in knowing the liveness or availability of the services across the cluster
+5. The discovery server should support high-available hosting through master/slave architecture 
+
+There are lot of third-parties providing the opensource discovery registries or server for identifying and locating the services like:
+1. netflix eureka server
+2. hashicorp consul
+3. apache zookeeper
+
+out of the available projects, the most popular is netflix eureka server. All the above projects are implemented in java platform and are being built on Rest capabilities.
+	
+Eureka Server	
+The Eureka Server has been built on jersey implementation of jaxrs api and it has to be build and deployed on tomcat server. In order to work with project we need to build the eureka server by writing necessary configurations or configuring the components, build them package and deploy it on an standalone tomcat server which is an labourious job and takes huge amount of time in getting the eureka running!
+	
+To help us in quickly hosting or get the Eureka Server running, the Spring team has provided integrations to Eureka Server aspart of Spring Cloud initiation.
+Through spring boot autoconfigurations most of the EurekaServer components are autoconfigured by reading the properties from yaml/properties files and it would be deployed on embedded tomcat server thus relieving us from the job of writing complex code in configuring those components and deploying them on standlone container.
+	
+All the above mentioned features are provided aspart of the Eureka Server like
+1. during the startup each microservice register by itself with eureka discovery server, the eureka server holds the information about the microservices within the memory itself, since the availability of the services changes quite frequently
+2. to help the eureka server to properly route the client request to the active instance of the service, every microservice by itself has to publish the heartbeats to the eureka server
+3. whenever the client sends an discovery request the eureka server quickly looks up for the microservice in-memory and provides the endpoints info to the clients
+
+How to host or run an Eureka Server?
+There are #3 parts are involved in using the eureka server
+1. hosting or running the eureka server
+2. make the microservice publish or register themself with the eureka server about their availability
+3. build the client applications to discover the microservices using the help of eureka server
+
+In addition to the above we need to use the help of ConfigServer for distributing the configuration of microservices across the instances of the cluster and use ConfigClient to boostrap them
+
+#1 setup the spring boot + spring cloud application with below starter dependencies
+- spring-cloud-starter
+- spring-cloud-starter-config
+- spring-cloud-eureka-server
+
+#2 few points to memorize and understand
+The eureka server comes up with discovery client libraries packaged inside it. The purpose of discovery client libraries is, they help the client application to communicate with eureka server in locating the services
+
+Then why does eureka server requires discovery client api?
+when we are running the Eureka Server in production deployments we host the eureka as Master/Slave architecture, so that if the master server crashes the client can detect the microservices through the help of slaves
+
+The slave or replica server during the startup will discover the master and pulls the registry through the help of discovery client library. 
+Note: By default the eureka server discovery client is enabled.
+	
+When we are running/hosting an master server we dont need discovery capabilities and even fetching the registry information, since by default these 2 are enabled, we need to explicitly turnoff by writing necessary configuration while hosting an master.
+	
+application.yml
+server:
+  port: 9099
+eureka:
+  client:
+   register-with-eureka: false
+	 fetch-registry: false
+		 
+		 
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

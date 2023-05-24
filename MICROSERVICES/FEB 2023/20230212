@@ -1,0 +1,26 @@
+How to access an Microservice Endpoints through Eureka Discovery Server in ClientApplication?
+since the microservices are scattered across the cluster, the client application dont know where these services are located. so we need to use Eureka Discovery Server to locate the Microservice Application to access their endpoints
+
+There are #2 steps involved in accessing an microservice application/endpoints through Eureka Discovery Server
+1. Discover the Nodes on which Microservice application is running.
+we need to talk to eureka server from Client Application using Discovery Client Library
+2. Access the Microservice
+once we know the Node on which the Microservice is running, we need to build the complete URI of the Resource we wanted to access and use RestTemplate for accessing the resource
+
+#1. 
+The DiscoveryClient Library has provided DiscoveryClient component using which we can discover the microservices. we need to configure the DiscoveryClient as bean definition by populating eureka server information.
+	
+but while working with spring boot + spring cloud we dont need to manually configure DiscoveryClient as a bean definition we can take the help of AutoConfiguration using @EnableDiscoveryClient
+	
+In addition we need to pass/provide EurekaServer configuration in application.yml
+eureka:
+  client:
+   register-with-eureka: false
+	 fetch-registry: true
+   service-url:
+     defaultZone: es1, es2
+
+discoveryClient.getInstances("servicename");
+
+
+	

@@ -1,0 +1,127 @@
+why do we need to use client-side loadbalancer for distributing the traffic across all the instances of the microservices?
+we cannot use server-side loadbalancer for distributing the traffic across the instances of the microservices, because the loadbalancer dont know which microservice is running on which node of the cluster, it treats all the nodes as symmetric and distributes the traffic to any of the node using loadbalancing algorithms irrespective of the service is availableon the node or not. This will leads to failures
+
+
+To avoid this problem, we can create 1 loadbalancer per 1 microservice type and we need to manually update the nodegroup in the loadbalancer pointing to the servers on which our application is running. 
+problems:
+1. too many loadbalancers increases the cost of deployment and delivery
+2. manually configuring the nodegroups in the loadbalancer is impractical and in-feasible because the microservices are scaled on the cluster dynamically
+
+From the above we can understand only way to distribute the traffic across the instances is through client-side loadbalancer, because the client can discover the number of nodes/instances on which our microservice application is running, so he can use algorithms like round-robin etc in distributing the traffic across the instances of the service
+
+Now the client-side application developer has to write the code for pulling the instances of the microservice and distribute the traffic across the instances. This seems to be an common logic that should be implemented across each client application eventually endup in writing lot of code per each microservice invocation. So instead of we write the discovery and loadbalancing logic, there are several third-parties provided client-side loadbalancer libraries
+
+1. Netflix Ribbon = The Netflix ribbon is an client-side loadbalancer library using which the client applications can discover the service and loadbalance them across the instances
+The spring has deprecated the support for Ribbon loadbalancer and replaced with Spring Cloud Loadbalancer
+
+How does the spring cloud loadbalancer works?
+For each microservice invocation before sending the request to the endpoint, we need to discover the nodes and apply loadbalancing logic which should applied across all the invocations.
+	
+The Spring Cloud Loadbalancer library has provided an aop advice, which is an MethodBeforeAdvice, that is applied on RestTemplate. so when we invoke any of the methods on RestTemplate before executing the methods of the RestTemplate class, the MethodBeforeAdvice will be executed
+
+The advice takes care of applying discovery and loadbalancing logic and replaces the endpointURL pointing to a node and passes to the restTemplate method which invokes the final endpoint
+
+http://PHARAMACY-SERVICE/drug/{drugName}
+
+restTemplate.getForObject(url, String.class);
+
+class LoadbalancerAdvice implements MethodBeforeAdvice {
+	@Autowired
+	DiscoveryClient discoveryClient;
+	
+	public void before(Method method, Object[] args, Class classType) {
+		String endpointURL = args[0];
+		String serviceName = endPointURL.split(":")[1].split("/").[0];
+		
+		List<ServiceInstance> instances = discoveryClient.getInstances(serviceNmae);
+		// loadbalance logic
+		node
+		args[0] = newURL;		
+	}
+}
+
+class RestTemplate {
+	public T getForObject(url, Class<T>) {
+		
+	}
+	
+}
+
+
+PharamacyStore
+|-src
+	|-main
+		|-java
+			|-PharamacyStoreApplication.java
+		|-resources
+			|-application.yml
+|-pom.xml
+	|-spring-boot-starter-web
+	|-spring-cloud-eureka-client
+	|-spring-cloud-starter-config
+	|-spring-cloud-loadbalancer
+	
+application.yml
+-----------------
+eureka:
+  client:
+   register-with-eureka: false
+	 fetch-registry: true
+	 service-url:
+     defaultZone: http://localhost:8889/eureka
+
+@SpringBootApplication	
+@EnableDiscoveryClient
+class PharamacyStoreApplication {
+	public static void main(String[] args) {
+		ApplicationContext context = SpringApplication.run(PharamacyStoreApplication.class, args);
+		DrugInvokerService drugInvokerService = context.getBean(DrugInvokerService.class);
+		List<DrugInfo> drugs = drugInvokerService.searchDrugs("dolo");
+		
+	}
+	
+	@Bean
+	@LoadBalanced
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
+}
+
+@Component
+class DrugInvokerService {
+	private final String DRUG_SERVICE_URL = "http://PHARAMACY-SERVICE/drug/{drugName}";
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	public List<DrugInfo> searchDrugs(String drugName) {
+		
+		ResponseEntity<List<DrugInfo>> response = restTemplate.exchange(DRUG_SERVICE_URL, RequestMethod.GET, null, new ParameterReferenceType<List<DrugInfo>>{});
+		response.getBody();
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,123 @@
+Monolithic application architecture
+------------------------------------
+There are lot of drawbacks in building an application based on monolithic application architecture
+1. overloaded IDE
+as the entire project is built out of single sourcecode, when we change any class within the project, the IDE compiles the whole code and all the modules of the project for each change, due to which huge amount of system resources will be consumed and IDE will result in non-responsive and kills the develpers productivity
+
+2. overloader server runtime
+as the entire application with all the modules together are packaged into single application deployable artifact, the huge the size of the application, it takes more startup time in starting the application on the server, due to which the develpers endup in spending lot of time in debugging the application.
+	
+3. modularity and reusability is difficult to achieve
+since the project is very huge and comprises of many modules in it, the developer often find it very complex to identify the functionality he is looking for is already available across any of modules are not, due to which he endup in building the component of his own rather than encouring reusability
+
+4. Large monothic applications makes the developers always find difficult to understand the application and they will afraid on working on them. due to which they fail in understanding the application and results in poor quality of code being written
+
+5. scalability of the application is hard to achieve
+5.1 In a monolithic application, the only way of achieving scalability is by deploying multiple instances of the application across multiple machines, which is called horizontal scaling. This means the only way of achieving scalability in monolithic application is through hortizontal scaling
+5.2 Different modules of the application are different in nature, few are cpu bounded modules and few are memory-bounded modules. since we cannot scale individual modules in monilithic application we cannot categorize the resources specific to the module during scaling
+5.3 even the traffic or the load may appear for a specific module of the application, we cannot scale up individually so to scale up an single module also we need to deploy the entire application on one more machine due to which the cost of scalability will be very high
+
+6. Continous Integration and Continous deployment is tough to achieve
+it is tough to achieve continous integration and deployment with monolithic application, because the application is very huge and it takes lot of time for shutting down and starting up. They could be a posibility during shutdown, the scheduled/cron jobs might have scheduled to running aspart of the application due to which the application may not have shutted down properly. when we trigger a new deployment, the existing jobs might fail in stopping due to which the redeployed application will result in failure of starting thus leaving the system in in-consistent state
+
+7. scaling up the development team is very difficult
+When the application is growing bigger, we cannot manage it with a small development team. We need to increase the number of resources working on the application. if more resources means more difficult to manage, so we need to break the resources into multiple teams either based on 
+1. technology
+2. domain/functionality
+
+By breaking the people into multiple teams and assigning them across different modules of project to work on brings lot of challenges
+7.1 since the teams are working independently on their respective modules, the changes made by one team might result in breaking the other modules being developed by other teams with in the project thus leaving the system in-compatible
+
+7.2 even one of the module has finished their work, they need to wait for other modules to uptake their changes and integrate into their modules to get them released together. due to which the entire team has to wait sitting idle for other modules to be finished
+
+so exccess planing and coordinates is required in executing the project
+
+8. Long-term commitment towards the technology stack
+Monolithic applications forces us to stick to an technology stack. at the begining of the development itself we need to choose the technical stack and stick to it. later on new technologies has been emerged or introduced we cannot uptake them since we cannot modify or upgrade a single module in the system incrementally and integrate with existing modules to deploy and work together. The only ways is to rebuild the entire system which is more costly
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

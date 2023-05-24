@@ -1,0 +1,114 @@
+OpenFeign
+---------
+Spring cloud openfeign is an declarative rest client library used for accessing the microservices without writing any client code aspart of the application
+There are lot of features are available in openfeign that makes it more powerful library like
+1. it is an declartive client library, we are going to write interface method by annotating with spring rest annotations describing the service we wanted to access, without writing the code
+2. The feign client is highly customizable through various different components like
+	2.1 encoders/decoders
+	2.2 loggers
+	2.3 loadbalancer
+	2.4 Feign Builder
+	
+
+in our client application while accessing the microservices, we end up in repeatedly writing the same code across the invoker classes for a each specific type of the request irrespective of which resource we are acessing.
+	
+For eg.. if we are invoking an microservice which is accepting
+1. GET request
+2. Path Variables as an input
+the way we need to write the code for any microservice of this characteristic of request/response would be same. Instead of we duplicating the code across all the invoker classes for accessing an microservices we can use an common Invoker class as below
+	
+	
+class HttpInvoker {
+	private RestTemplate restTemplate;
+	public HttpInvoker(RestTemplate restTemplate) {}
+	
+	#this method can invoke any service basedon the inputs we passed
+	public Object invokeGET(String requestURL, Map<String, String> pathVariables, Class<?> responseType) {
+		UriComponentBuilder builder = null;
+		URI resourceURI = null;
+		ResponseEntity<?> responseEntity = null;
+		
+		builder = UriComponentBuilder.fromUriString(requestURL);
+		resourceURI = builder.build(pathVariables);
+		
+		responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, null, responseType);
+		if(responseEntity.getStatus() == Status.OK) {
+			return responseEntity.getBody();
+		}
+		// throw exception
+	}
+	
+	public Object invokeGET(String requestURL, Map<String, String> pathVariables, Map<String, String> queryParams, Class<?> responseType) {
+		UriComponentBuilder builder = null;
+		URI resourceURI = null;
+		ResponseEntity<?> responseEntity = null;
+		
+		builder = UriComponentBuilder.fromUriString(requestURL);
+		for(String paramName : queryParams.keySet()) {
+			builder.queryParam(paramName, queryParams.get(paramName));
+		}
+		resourceURI = builder.build(pathVariables);
+		responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, null, responseType);
+		if(responseEntity.getStatus() == Status.OK) {
+			return responseEntity.getBody();
+		}
+		// throw exception		
+	}	
+	
+	public Object invokePOST(String requestURL, Map<String, String> pathVariables, Map<String, String> queryParams, Object entity, Class<?> responseType) {
+		UriComponentBuilder builder = null;
+		URI resourceURI = null;
+		ResponseEntity<?> responseEntity = null;
+		
+		builder = UriComponentBuilder.fromUriString(requestURL);
+		for(String paramName : queryParams.keySet()) {
+			builder.queryParam(paramName, queryParams.get(paramName));
+		}
+		resourceURI = builder.build(pathVariables);
+		responseEntity = restTemplate.postForEntity(requestURL, entity, responseType);
+		if(responseEntity.getStatus() == Status.OK) {
+			return responseEntity.getBody();
+		}
+		// throw exception		
+	}
+}	
+
+
+class DrugServiceInvoker {
+  private HttpInvoker httpInvoker;
+	
+	public List<DrugInfo> searchDrugs(String drugName) {
+		Map<String, String> pathVariableMap = new HashMap<>();
+		pathVariableMap.put("drugName", drugName);
+		return httpInvoker.invokeGET("http://PHARAMACY-SERVICE/drug/{drugName}/search", pathVariables, List<DrugInfo>.class);
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

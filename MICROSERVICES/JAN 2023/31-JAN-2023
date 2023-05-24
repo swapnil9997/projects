@@ -1,0 +1,106 @@
+How to integrate the Microservice application with spring cloud configserver?
+We dont want to package the Microservice application configuration within the application, rather than we should pull the configuration from cloud configserver.
+	
+#1. we need to write an Http/Rest Client program that takes the serviceName as an input and sends the request to the Cloud ConfigServer and pulls the service configuration and returns. 
+In the Http/Rest Client program we need to populate the ConfigServerURL and serviceName to invoke the ConfigServer
+
+#2. After getting the configuration we need to load and create ioc container
+during the time of bootstrapping the application, we need to invoke the Cloud ConfigServer through the help of Client program and pull the configuration and load into the ioc container
+
+
+Since Microservice application is built-on springboot stack, can we ask SpringApplication class itself to pull the configuration during the bootstrap from cloud config server and load into the ioc container before creating the ioc container?
+No, there are plenty of reasons for this 
+1. every spring boot application doesnt externalize the configuration information in the cloud configserver, incase of microservices applications only, since multiple instances of these applications are deployed across the cluster, to easily manage the configuration across these instances we need to centralize and distribute the configuration through ConfigServer
+so if the SpringApplication class itself is bearing the responsibility of pulling the configuration from ConfigServer, unnecessarily we endup with performing additional step of looking up into ConfigServer even we dont need
+
+2. If SpringApplication class is looking up for the external configuration from ConfigServer, then the only point of loading external configuration into boot application will be Cloud ConfigServer only, but there are many other external sources from we wanted to get these configurations being loaded into Microservice application. So we need to decouple the SpringApplication class or an Microservice application from ConfigServer
+	
+	
+So Spring Boot should provide an extension point or an external hookup through which we can get the Configurations being loaded from external source. 
+SpringApplication class, during the bootup will locate an bootStrap context (ioc container) available within the application, if exists will create an ioc container by inheriting from the bootstrap context as an parent ioc container. (nested ioc containers), so that we can plugin our own mechanism of loading the configuration from any external source and place it in bootstrap context ioc container, so that it would be pickedup as parent container by SpringApplication class
+	
+From the above we can understand we need to do #2 things
+1. we need to write an Http/Rest Client program that invokes the ConfigServer and pulls the Configuration
+2. we need to write one more component that gets executed during the time of bootstrapping the spring boot application, before SpringApplication class begins execution in our application, this component should take use of Rest/Http Client program and access the configuration from ConfigServer and create an bootstrap context within the application, so that SpringApplication class can pick the context and nest it as parent ioc container
+	
+Looks like every Microservice application during the bootup needs to pull the configuration from Cloud ConfigServer and loads into the bootStrap context which is an common requirement. Instead of we implementing the functionality, spring cloud itself has provided these components as part of 
+1. spring-cloud-config-client  = http/rest client program
+2. spring-cloud-bootstrap = initializer
+	
+To load the configuration from cloud configserver into the bootstrap context of our application during the time of bootstraping the application , the spring cloud has provided boostrap dependency. The spring-cloud-bootstrap dependency creates an parent context by loading the external configuration from the cloud config server
+
+when we add bootstrap dependency in our application, it creates an bootstrap context by reading bootstrap.yml|properties file in case if the file is not available, it looks for application.yml|properties file and reads the configserver URI and pulls the configuration using SpringCloud ConfigClient
+
+The bootstrap context looks for configServerUri within bootstrap.yml|properties, once found, it uses that and invokes cloudConfigServer endpoint using configClient and loads the microservice configuration into new env object using which creates an parent context and then handovers to SpringApplication class.
+	
+In addition, if we wanted to have some properties to be available during the time of bootstrapping the application before SpringApplication class creates an ioc container, then we can place them in bootstrap.yml|properties
+
+In this file write the application configuration which will not change over the time (static configuration). In addition it is mandatory to write applicationName for pulling the configuration from configServer
+
+#1. application.yml|properties
+spring:
+	application:
+		name: pharmacy-service
+server:
+	port: 8081
+		
+
+#2. bootstrap.yml
+spring:
+	cloud:
+		config:
+			uri: http://localhost:9099
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

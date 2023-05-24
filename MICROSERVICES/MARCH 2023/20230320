@@ -1,0 +1,115 @@
+1. Decomposition
+2. Data Management
+3. Saga
+4. CQRS
+5. API Composer
+
+Async microservice communication
+
+Spring Security
+Restful Services + Spring + Microservices
+-----------------------------------------------------------------------------------------------------------------------------------
+How do we decompose the enterprise application into Microservices?
+The enterprise large-scale application can be broken down into microservices based on
+1. decompose by business capabilities
+2. decompose by subdomain
+3. self-contained service
+4. Service per team
+
+
+1. decompose by business capabilities
+A business capability represents an business object of the business system we are building, for eg.. while building an e-commerce platform the capabilities that typically exists are:
+
+1. product management
+2. order management
+3. delivery management
+4. inventory management
+5. Reviews
+these capabilities can be modelled into corresponding microservice applications like
+1. product-management-service
+2. order-management-service
+3. delivery-mangaement-service
+..
+etc
+
+2. decompose by sub-domain
+Define services based on domain-driven design (DDD) subdomains. DDD refers to applications problem space - the business = as the domain. A domain is consists of multiple subdomains. Each Subdomain corresponds to different parts of the business
+
+Subdomains can be classified into 3 types
+1. Core = key differentiator for the business and contributes most value for the application
+2. Supporting = related to what business does, but is not the differentiator
+3. Generic = not specific to the bussiness 
+
+In an HRM solution the below are the domains we can identify and broken them into Microservices of their own.
+
+HRM
+- Leave Management
+- Hiring
+- OnBoarding
+- Time Management
+- Performance
+- Careers
+- Employee Management
+- Scheduling 
+
+3. Self-contained Service
+Design the service so that it can response to synchronous request without waiting for the response from any other service. The service should be self-contained by itself without having any dependency
+
+4. Service per team
+Each Service is owned by one team, which is responsible for developing and delivering the service end-end
+
+
+
+Data Management
+-------------------
+1. Database per Service
+2. Shared Database
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

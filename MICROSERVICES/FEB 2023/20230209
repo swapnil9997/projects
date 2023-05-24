@@ -1,0 +1,136 @@
+How to register Microservice application with Eureka Server?
+in the Microservice application we need to add Eureka Client Library, that comes with discovery-client api inside it, through which the microservice application can register itself as an endpoint or service in Eureka Server
+
+To register with EurekaServer along with eureka-client library we need to write configuration pertaining to eurekaserver letting the discover-client of the microservice register with eureka
+
+pharamacy-service.yml
+---------------------
+eureka:
+  client:
+    register-with-eureka: true #microservice should be registered with the eureka server
+		fetch-registry: false # because microservice application doesnt require registry information about which services are available	
+		service-url:
+			defaultZone: http://host:port/eureka
+-----------------------------------------------------------------------------------------------------------------------------------
+How to enable HA for Eureka Server?
+While hosting the Eureka Server in production environment, we should not run single-instance of the Eureka Server, because if the Eureka Server has been down, it becomes single-point failure and all the services becomes un-available
+
+To have High Availability, we need to run multiple replicas of the Eureka Server on 2 different machines, so that if one crashes the other machine will be available for discovering the services.
+When we are running multiple Eureka Servers for High Availability, one of the server would acts as Master Node and other EurekaServer becomes slave for the Master.
+	
+#1. Master Eureka Server
+The Master Eureka Server would not register with any other eureka server within the cluster and would not fetch the registry information from other eureka server
+
+All the Microservices applications would register themself with Master EurekaServer only and would publish heartbeats to the Master ignoring the Slave, because if Microservices starts registering with all the replicas of the Eureka Server and publishes heartbeat the cluster will be loaded with heavy traffic and performance will be impacted.
+	
+#2. Slave Eureka Server
+The slave register by himself with Master Eureka Server and fetch the registry information from master with which he will be populated.
+	
+athenaeurekaserver
+|-src
+  |-main
+		|-java
+			|-AthenaEurekaServerApplication.java
+		|-resources
+			|-application.yml
+|-pom.xml
+
+@SpringBootApplication
+@EnableEurekaServer
+class AthenaEurekaServerApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(AthenaEurekaServerApplication.class, args);
+	}
+}
+
+
+application.yml
+---------------
+spring:
+  application:
+    name: athenaeurekamaster
+  config:
+    activate:
+      on-profile: master
+server:
+	port: 8889
+eureka:
+  client:
+    register-with-eureka: false
+		fetch-registry: false
+			
+spring:
+  application:
+    name: athenaeurekaslave
+  config:
+    activate:
+      on-profile: slave
+server:
+  port: 8887
+eureka:
+  client:
+    register-with-eureka: true
+		fetch-registry: true
+		service-url:
+			defaultZone: http://host:port/eureka
+			
+
+java -Dspring.profiles.active=master target\athenaeurekaserver.jar [master server]
+java -Dspring.profiles.active=slave target\athenaeurekaserver.jar [slave server]
+
+
+While working with Master/Slave Eureka, in microservices application we need to specify both master/slave urls under defaultZone.
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

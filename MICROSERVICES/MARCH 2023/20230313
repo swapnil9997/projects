@@ -1,0 +1,113 @@
+Spring CloudGateway is an single entrypoint into the microservice application that receives the request and routes the request to the corresponding microservice application
+
+1. Route
+2. Predicate
+3. Filter
+
+There are #2 ways of configuring the Routing with predicates and filters
+1. configuration approach
+2. programmatic approach
+
+How to work with spring cloud gateway?
+1. create an spring boot starter project with starter dependencies:
+spring-cloud-starter-gateway
+
+
+2. The SpringBoot Application class will be generated
+	
+@SpringBootApplication	
+class AthenaGatewayApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(AthenaGatewayApplication.class, args);
+	}
+}
+
+3. write the route configuration to route the request to the proxied service
+
+application.yml
+server:
+	port: 9099
+spring:
+	cloud:
+		gateway:
+			routes:
+				- id: member_mgmt_route
+					uri: http://localhost:8082/
+					predicates:
+						- Path="/membermgmtservice/**"
+					filters:
+						- RewritePath=/membermgmtservice(?<segment>/?.*), $\{segment}
+						
+here Path is predefined predicate , similarly the RewritePath is an filter that is already provided by the cloudgateway. The above way of writing the configuration is called "shortcut configuration"
+	
+The Fully Extended Form of configuration is using argments as below:
+
+application.yml
+server:
+	port: 9099
+spring:
+	cloud:
+		gateway:
+			routes:
+				- id: member_mgmt_route
+					uri: http://localhost:8082/
+					predicates:
+						- name: Path
+							args:
+								- "/membermgmt/service/**"
+					filters:
+						- name: RewritePath
+							args:
+								
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

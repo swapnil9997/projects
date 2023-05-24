@@ -1,0 +1,166 @@
+What is an Microservice application?
+The Large-Scale enterprise application should be broken down into smaller microservices based on the below characteristics
+1. loosely coupled
+2. independently-deployable
+3. highly scalable
+4. resilient
+5. mutually collaborative services
+that can be developed by independent collaborating teams
+
+#1.How can we break down the large application into smaller services or how to identify the microservices?
+Each module of the application is not an service or microservice. There are various design principles to be considered in identifying and decompsing the system into microservices like
+1. based on business capabilities
+2. based on subdomain
+3. service per team
+4. self-contained service
+
+#2. How can we make microservices independently deployable?
+Each microservice has to be build out of its own sourcecode project, no 2 microservice applications should hold direct references with each other interms of libraries or classpath. If we are holding the concrete references through classpath, then we endup in build & deployment dependencies of these applications
+
+2.1 How can a microservice can use the functionality of other microservice, when we dont hold classpath references of other services?
+A microservice can reuse the functionality of the other microservice by making an api class only
+	
+2.2 Why we want the microservices to be independently deployable?
+There are plenty of advantages we get when we make them independently deployable
+1. each microservices can be build out of their own source code project without having the references of others so that each team can develop, test and deploy their services 
+2. We can organize and conduct the development of the application by breaking the development team into smaller groups/teams can develop the application in parallel
+3. Each module can be developed and can be release independent of others, without affecting the available of other modules
+4. Each module can be scaled independently (we can achieve vertical scaling)
+5. Failures can be isolated from others
+
+#3. Why do we want these microservices completely loosely-coupled?
+If there exist coupling between the services, a change in one service will effect other microservices of the system. due to this 
+	1. we cannot plan, coordinate and build the system with independent teams per module
+	2. huge coordinate across the teams of the modules is required 
+	3. per each change we make within a module/service, we need to do lot of documentation and we need to perform impact analysis for every change in requirement
+	4. due to coupling the complexity across the modules increases and results in poor quality of code
+thus degrades the productivity and delivery of the system/application
+
+if we make the microservices loosely coupled from each other
+1. then a change in one service is isolated from other microservices of the system, because a microservice is resuing the functionality of other service through api calls rather than holding concrete references
+2. due to the loosely coupling we can have multiple teams engaged in development of these microservices and can achieve higher independence in development and delivery
+3. no coordination required among the teams for delivery
+4. no need huge documentation or change impact analysis per each requirement
+
+
+How can we make microservices completely loosely-coupled?
+#1. No 2 microservices should hold the concreate references of others via the classpath to reuse the functionality. The only way a microservice can reuse the functionality of others is through api calls only.
+	
+#2. In addition to make the microservices completely loosely coupled, each microservices has to be build out of its own schema/database.
+If all the microservices are sharing a common schema/database. A change requirement of a microservice may need to modify a database table, which will not affect only that service even other services using the same table will also be affected due to which we cannot achieve loosely coupling
+
+loosely coupling: A change in one microservice should not affect the other
+So to achieve loose couping across the microservices, each microservice has to have its own independent schema/database which is called database per service pattern
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

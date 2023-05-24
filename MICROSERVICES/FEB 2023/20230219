@@ -1,0 +1,47 @@
+OpenFeign
+---------
+Spring Cloud OpenFeign is an declarative client library that can be used for accessing the microservices or rest endpoints without writing the code
+We can write an interface with methods declared representing the parameters and return types of the remote api we wanted to access and annotate them with spring mvc annotations, so that the openfeign client library creates an runtime proxy ontop of the interface we defined, which contains the corresponding logic in reading the annotations and identifying the remote service we want to invoke and performs the invocation
+
+For eg.. if we want to invoke an api 
+/policy/{policyNo}/details
+GET
+responses:
+	PolicyDetails
+	
+then we need to define an interface representing the parameters and returnTypes of the api as below.
+
+@FeignClient(url="http://localhost:8081/policy")		
+interface PolicyService {
+	@GetMapping(value="/{policyNo}/details", consumes = {MediaType.APPLICATION_JSON_VALUE})	
+	PolicyDetails getPolicy(@PathVariable("policyNo") int policyNo);
+}
+
+@SpringBootApplication
+@EnableFeignClients
+class FeignClientApplication {
+	public static void main(String[] args) {
+		ApplicationContext context = SpringApplication.run(FeignClientApplication.class, args);
+		PolicyService policyService = context.getBean(PolicyService.class);
+		PolicyDetails pd = policyService.getPolicy(1);
+		System.out.println(pd);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

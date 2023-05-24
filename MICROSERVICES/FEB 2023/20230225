@@ -1,0 +1,117 @@
+Spring Cloud Circuit Breaker
+----------------------------
+We can write our own code for implementing circuit breaker pattern in our application, instead there are lot of vendors provided many third-party libraries for using circuit breaker in our application like
+1. Netflix Hystrix
+2. Resilience4j
+3. Sentinel
+4. Spring Retry
+
+For eg.. if we are using Netflix Hystrix Circuit breaker library in our application, we need to write the code wrapping around the Hystrix provided api in using the Circuit Breaker
+
+HystixCircuitBreaker
+- T run(Invocation invocation);
+
+class MemberManagementApiInvoker {
+	@Autowired
+	HystrixCircuitBreaker hystrixCircuitBreaker;
+	
+	@Autowired
+	RestTemplate restTemplate;
+	
+	public MemberInfo getMemberDetails(int memberNo) {
+		return hystixCircuitBreaker.run(()->{
+			// UrlComponentBuilder builder = ..
+			return restTemplate.getForObject(...);
+		});
+	}
+}
+
+@SpringBootApplication
+class CBSpringApplication {
+	public static void main(String[] args) {
+		
+	}
+	
+	@Bean
+	HystrixCircuitBreaker circuitBreaker() {
+		// populate the threshold
+		return cb;
+	}
+}
+
+In the above code we are using Hystrix provided api classes in implementing CircuitBreaker functionality for our application, our code is wrapped inside the Hystrix library api classes. In future if we dont want to use Hystrix and want to switch to Resilience4J then we need to goto each and every classin our application whereever we are using Hystrix api classes and rewrite them with Resilience4j api which is an huge effort and takes lot of time
+
+Instead of working with Individual libraries in implementing the CircuitBreaker functionality, spring cloud has provided spring cloud circuit breaker wrapper that works with many third-party implementations
+
+class HystrixCircuitBreaker {
+	Object run(Invocation invocation) {}
+}
+
+package org.springframework.cloud.circuitbreaker;
+interface CircuitBreaker {
+	Object run(Runnable, T fallback);
+}
+
+class HystrixCircuitBreakerImpl implements CircuitBreaker {
+	com.netflix.hystrix.CircuitBreaker cb;
+	public Object run(Runnable r, T fallback) {
+		// 
+		return cb.run(invocation);
+	}
+}
+
+class Resilience4jCircuitBreakerImpl implements CircuitBreaker {
+	com.resilience4j.CircuitBreaker cb;
+	public Object run(Runnable r, T fallback) {
+		// 
+		return cb.run(invocation);
+	}
+}
+
+class MemberManagmentApiInvoker {
+	CircuitBreaker cb;
+	
+	public MemberInfo getMemberDetails(int memberNo) {
+		return cb.run(()->{
+			// UrlComponentBuilder builder = ..
+			return restTemplate.getForObject(...);
+		}, () -> {});
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

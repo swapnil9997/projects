@@ -1,0 +1,62 @@
+1. Member Management
+2. Insurance
+3. Claim Managment
+4. Pharamacy
+5. Wellness
+6. Partner Services
+
+
+MemberManagement
+member
+member_no 
+member_nm
+
+MemberApiService
+- MemberInfo getMember(String memberNo) {}
+
+member
+member_no  first_nm  last_nm  dob  gender  email_address  mobile_no
+
+
+Insurance
+MemberPolicyApiService
+ Policy getPolicyDetails(String policyNo) {}
+
+plan
+plan_no  plan_name  plan_type  min_tenure  max_tenure   min_insurred_amount  max_insurred_amount  min_eligibility_age  max_eligibility_age  bonus_percentage   
+
+policy
+policy_no
+member_no
+plan_no (fk)
+policy_start_dt
+tenure
+insurred_amount
+premimum_amount
+premium_payment_term: HALF/MONTHLY/QUATERLY/YEAR
+policy_status
+
+
+java_program
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

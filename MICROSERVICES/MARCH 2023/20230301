@@ -1,0 +1,52 @@
+Rather than instantiating the CircuitBreaker object with default configuration, we wanted to create the CircuitBreaker object with our own configuration like
+1. failureThreshold
+2. interval
+3. half-open
+
+Nature of Microservices are different from one to another, few are slow running services because of interacting with backend/other microservices and few other microservices might have quicker response times. So we cannot use one circuit breaker object with one configuration to invoke different microservices
+
+So in our client application, based on the nature of the microservice we are accessing we need to create an CircuitBreaker object by populating relevant configuration pertaining to that microservice and use it
+
+CircuitBreakerFactory instantiates the object of CircuitBreaker with default configuration, but from the above we can understand we need different CircuitBreaker objects with different values based on the Microservice we are invoking
+
+So we need to tell CircuitBreakerFactory, create the object of CircuitBreaker with these configuration values like threshold, intervals etc so that it can instantiate the object of CircuitBreaker with the configuration supplied
+
+1. 
+Spring Cloud has provided CircuitBreakerConfiguration class, into which we need to populate the configuration values and pass it as an input to CircuitBreakerFactory
+
+2. Different CircuitBreaker vendors has different configurations so spring has provided one CircuitBreakerConfiguration class per one vendor implementation
+	
+based on the Vendor we are working with we need to instantiate the appropriate vendor CircuitBreakerConfiguration object by populating the configuration. To help us in creating the object of Vendor CircuitBreakerConfiguration, spring cloud has provided Builder class per each Vendor.
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

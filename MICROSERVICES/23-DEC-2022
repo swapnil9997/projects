@@ -1,0 +1,153 @@
+Introduction to Microservices
+Microservices is not an api/library or it is not an programming language, it is an methodology or an architectural style to be adopted in building large-scale complex business systems. The Methodology or the architectural style has defined bunch of recommendations, guidelines and patterns to be followed in building the enterprise large scale systems.
+	
+As per the microservices guideliness or architectural style:
+A complex business system has to be broken down into multiple smaller services based on the below characteristics:
+1. loosely coupled
+2. independently deployable
+3. highly scalable
+4. collaborative services
+5. resilient
+6. Highly Available
+that can be developed by multiple smaller mutually collaborating teams independently
+
+developer has to understand the architectural principles / patterns and recommendations in building microservices based applications. It would be very difficult for the developer in adopting the principles and patterns in building microservices applications from the scratch, so we need the support of programming languages
+
+But when it comes to microservices applications we just not only need support interms of technology by providing apis, we need even intrastructure tools in like collaboration, discovery, deployment, monitoring the microservices as well
+1. programming language apis
+2. tools
+unless we have both together we cannot delivery a microservices application
+
+So there should exist a programming language that should provide all the capabilities like apis/tools in building microservices application. but unfortunately we dont have a single programming language that provides all the complete solution facilitating in building microservices. Due to this implementation of microservices becomes quite complex in the market
+
+To help us in building microservices based solutions there are different players or vendors has offered various different tools and apis as below.
+
+1. Netflix = one of the early innovator and adopter of microservices architecture, they build lot of tools in facilitating the deployment, discovery and delivery of microservices
+1.1 eureka server (discovery server)
+1.2 ribbon
+1.3 hystrix
+1.4 zipkin
+1.5 zuul
+1.6 slueth
+
+2. apache = has provided few tools in facilitating the deployment of microservices
+Zookeeper
+
+Integrating these various different tools and making them work together in building, deploying and delivering the micro-services application becomes quite complex
+
+To overcome the above problems in building microservices application, the Spring Framework has introduced spring cloud/spring microservices mmodule
+The support of building microservices applications in Spring Framework has been provided in Phases
+1. Phase-I
+In Phase-I the goal of Spring Framework is to provide an microservices module that help us in integrating these various different vendor tools and facilitate them to deploy the whole system
+
+Spring MicroServices
+	-> integrating with eureka
+	-> Zuul
+	-> Hystrix
+	
+2. Phase-II
+The Spring Framework started building their own components replacing majority of the third-party vendor components in building microservices
+1. We dont need to use Netflix Ribbon client-side loadbalancer, instead spring microservices module has provided spring cloud loadbalancer which can be directly used in building microservices using spring framework
+2. Spring Microservices module has provided Circuit Breaker (Resilience4j), so we dont need to use Hystrix Circuit Breaker
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

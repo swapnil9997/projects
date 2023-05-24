@@ -1,0 +1,122 @@
+Microservices is an methodology or architectural style of building an enterprise application. The Microservices architecture or methodology has provided guidelines, recommendations and patterns that should be used in building the applications to be called as Microservices application
+
+The guideliness or architectural principle to be followed are:
+break the complex business system into smaller services where each of the services follows the below characteristics
+1. loosely coupled
+2. independently deployable
+3. scalable
+4. collaborative services
+5. resilient
+6. highly available
+7. can be developed by multiple smaller mutually collaborating teams independently
+
+We need programming api and tools for developing and delivering microservices applications. Looks like the programming languages has provided apis in building microservices applications, but has not provided any tools for deployment, delivery, integration or monitoring these microservices
+
+There are various players in market provided the tools required for developing, delivering and deploying microservices
+#1. Netflix 
+Netflix is an early adopter of the microservices technology and has built bunch tools and made them available as opensource
+1. eureka server = discovery server
+2. ribbon = client-side loadbalancer
+3. hystrix = circuit breaker
+4. Zuul = api gateway
+
+#2. Apache
+1. Zookeeper = distributed configuration management (Spring Cloud ConfigServer/ConfigClient)
+2. Zipkin = Tracing server for troubleshooting the latency problems in microservices
+3. Consul = discover server
+4. Camel = Gateway
+
+These are the tools provided by the various different vendors in java platform in-support of microservices.
+To build and delivery microservices application in java, a developer has to use the programming api and has choose the tool stack to be used in delivering the microservices which is often seems to be complex job, instead spring has comeup with Spring Microservices modules
+
+Spring Framework as part of Spring Microservices module has comeup with their own stack of tools replacing many of the third-party vendor tools
+Spring Cloud + Spring Microservices modules has provided the complete suite of tools in building microservices in java
+1. Eureka Server Integration
+2. Spring Cloud ConfigServer/ConfigClient (Replacing Zookeeper)
+3. Spring Circuit Breaker (Hystrix)
+4. Spring Api Gateway (Replacing Zuul)
+5. Spring Loadbalancer (Replacing Ribbon)
+6. Feign Client Api (Declarative api access library)
+-----------------------------------------------------------------------------------------------------------------------
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

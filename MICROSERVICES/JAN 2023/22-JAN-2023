@@ -1,0 +1,59 @@
+1. Spring Cloud
+1.1 Spring Cloud ConfigServer
+1.2 Spring Cloud ConfigClient
+
+2. Spring Microservices
+2.1 Eureka Server
+2.2 Spring Cloud Loadbalancer
+2.3 Discovery Client
+2.4 Spring Circuit Breaker
+2.5 Spring Cloud Gateway
+2.6 Feign Client
+-----------------------------------------------------------------------------------------------------------------------------------
+What is Spring Cloud Config Server, why do we need it?
+While working on Microservices applications, multiple instances of these applications are deployed, distributed across the cluster of machines. In case in these applications if the application configuration has been packaged inside the application (for eg.. by writing in application.yml|properties)	files and delivered we run into lot of problems
+Problems:
+1. every change in the configuration requires a rebuild/repackage of the application that produces an new verion of the artifact
+2. we need identify the instances of the application where those are running on the cluster, and should replace them with new verion of the application which is an tedious job
+3. while rolling the new verion of the application, we need to ensure the availability of the application, so while rolling the changes we need to use roll-out strategy which is complex job to handle it manually
+4. incase if we are running our microservice application in a containerized environment, a change in application configuration requires a rebuild of the containerized image which requires significant effort and time in baking the new image
+5. a huge coordination is required between development teams and devops engineering team in rolling the latest version of the containerized image by replacing the existing container instances
+
+From the above we can understand a small configuration change requires huge time, team cooridination, huge cost in rolling the changes and impact of availability and performance of the microservice, so how to overcome this problem?
+Spring Cloud module has provided Spring Cloud ConfigServer using which we can externalize the configuration of a Microservice application and distribute across all the instances of the microservice centrally
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

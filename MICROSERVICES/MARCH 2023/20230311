@@ -1,0 +1,99 @@
+Spring cloud gateway
+Spring cloud gateway is an single-entry point for all the microservices of our application, it acts as proxy in receiving the requests and routing them to the proxied services of the application
+
+There are #3 components are there in cloud gateway
+1. Route
+2. Predicate
+3. Filter
+
+1. Route 
+The Microservices of our application will not be exposed and accessible to the client application directly. We need to create an proxied url for each microservice in Spring Cloud Gateway routing the request to the microservice application. 
+To route the Request to the Microservice application we need to create an Route Configuration in Spring Cloud Gateway. The core or root of the Spring Cloud Gateway is an "Route"
+	
+2. Predicate
+using the predicate we define the condition around the characteristics of the request indicating when does that route should be used for proxying to the microservice.
+The Spring Cloud Gateway has provided lot of pre-defined predicates that can be used directly on a Route to apply conditions
+
+3. Filters
+Filters are used for applying pre/post processing the logic on each request that is received by the spring cloud gateway
+The Spring Cloud Gateway has provided pre-defined filters for performing most common operations on the request/response for eg..
+	1. Loadbalancer Filter
+	2. CircuitBreaker Filter
+	3. Service Discovery
+	4. Modiying Request/Response Headers
+	5. Mapping Request Headers
+	6. Adding more Response Headers
+	7. RewriteURL
+	8. Add QueryParameters
+	
+To work with spring cloud gateway we need to define route configurations to receive the request by the spring cloud gateway onbehalf the microservice route it. Additionally for each route we can attach predicates/filters. This Route Configuration we wrote for routing the requests is called "Routing Mapping"
+	
+Spring Cloud Gateway Architecture / how does it works?	
+1. When the client application has send the request to the Spring Cloud Gateway, an entrypoint handler will receive the request
+2. and takes the help of Gateway HandlerMapping to identify for the request being received which route should be choosen to be used for proxing the request to the Microservice
+	2.1 The Gateway HandlerMapping chooses the Route based on the Predicates defined on the Routes and picks the Matching Route and identifies the Filters attached to the Route and returns an FilterChain object
+	
+3. A FilterChain object contains the ordered set of Filters that has to be applied or executed before the request is forwarded to the proxied service or after the microservice computed the response and before the response is returned to the client application
+
+4. Now the FilterChain object is passed as an input to Gateway Web Handler, that takes the job of running or executing all the Filters that are part of FilterChain
+
+
+1. How to work with Spring Cloud Gateway?
+There are #2 approaches of working with spring cloud gateway are there
+1. Through configuration approach
+2. Programmatic api approach
+In the real-time people prefer to use configuration approach to maintain and modify the route configurations easily.
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

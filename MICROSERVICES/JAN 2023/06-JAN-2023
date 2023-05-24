@@ -1,0 +1,122 @@
+What is microservices application architecture?
+The large-scale enterprise application can be broken down into smaller microservices which are
+1. loosely coupled
+2. independently deployable
+3. high scalable
+4. resilient
+5. highly available
+6. mutually collaborative services
+that can be developed by multiple smaller individual teams together.
+	
+advantages:
+1. Each microservice is built out of its own codebase, or independent project without having any dependencies across the services through classpath due to which
+	1.1 developers can easily understand the code, and can better contribute in developing the application
+	1.2 since the developer understands the code, he can better encourage modularity and code reusablity
+	1.3 ides are not overloaded
+	1.4 server runtimes are not overloaded
+	1.5 independent development teams can develop the system in parallel
+2. highly scalable (vertical scaling)	
+	1. we can only scale the service on which the load is heavy, so that the cost of scaling will be less
+	2. based on the nature of the service we can entitle or allocate the resources specifically
+3. the microservices can be developed by independent teams in parallel
+4. fault isolation
+5. testability of the services becomes easy
+6. no long-term commitment to technology stack
+7. ci/cd can be achieved easily
+
+drawbacks
+developer has to deal with the complexity of designing and developing distributed systems
+1. inorder to make one microservice communicate with another microservice, the invocation logic has to be written by the developer in integrating and reusing the functionality
+2. many of the times while invoking multiple microservices in serving the functionality, developer has to write complex archestration logic
+3. prone to network failures and should ensure the relevant logic for handling the network failures should be taken care
+4. IDEs and tools are not designed to work with Microservices architecture
+5. testing the microservices by mocking the other services is an tedious job
+6. debugging the microservices application is very difficult
+7. deployment complexities are high
+8. the more number of instances we are deploying it multiples the jvm memory usage and results in huge wastage
+------------------------------------------------------------------------------------------------------------------------
+What is the support of JEE platform in development and delivery of the microservices architecture based application?
+or
+Can we leverage or use the jee platform tools/technologies in developing and delivering the microservices applications?
+No, If no why, then what is the alternate
+
+
+Before understanding whether we can use jee platform for development and delivery of microservices application, first lets explore what features are there in Jee and how can we use jee platform for development and delivery of an typical application
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,101 @@
+How to use the configuration information that is published aspart of the CloudConfigServer in a Microservice Application?
+
+In the Microservice application we dont want to package the configuration information, because whenever we need to change the configuration information, we need to rebuild, repackage and redeploy the application across all the instances, instead we want to pull/read the configuration information pertaining to our microservice from Spring Cloud ConfigServer
+
+During the bootstrapping of our Microservice application, before creating the ioc container we need to load the configuration information of our microservice by invoking the ConfigServer endpoint, an Microservice application is built ontop of spring boot, so let us understand how does spring boot application bootstraps, so that we can investigate where can we write the logic for pulling the Configuration from Cloud ConfigServer
+
+SpringApplication.run(Application.class, args)
+1. creates an empty environment object
+2. detects and loads the external configuration of our application into the env object
+3. prints banner
+4. detects the WebApplicationType based on classpath dependencies
+   4.1 if WebMvc jars are found under the classpath, it treats the WebApplicationType=WEB and creates
+	 	AnnotationConfigServletWebServerApplicationContext
+	 4.2 if webflux jars are found under the classpath, it treats the WebApplicationType=REACTIVE and creates
+	 	AnnotationConfigReactiveWebServerApplicationContext
+	 4.3 else WebApplicationType=NONE
+	 	AnnotationConfigApplicationContext
+5. detects, instantiates and registers spring factories
+6. invokes ApplicationContextInitializer
+7. PrepareContext
+8. RefreshContext
+9. Invokes CommandLineRunners and ApplicationRunners
+10. during the above stages, it will publish the events and invokes the appropriate listeners
+
+
+From the above we can see SpringApplication class by default detects and loads the application configuration from various different sources like
+	1. FileSystem (application.yml|properties) placed under classpath or classpath/config
+	2. Environment variables
+etc
+
+In our case the configuration information is not available locally, rather it is placed in Cloud ConfigServer, so we wanted to invoke make an invocation to ConfigServer and reads/loads the configuration into our application. 
+	
+Can the SpringApplication can take the responsibility of invoking the ConfigServer and detects and loads the Configuration from ConfigServer?
+But SpringApplication class should not take the responsibility in loading the Configuration from ConfigServer, because every spring boot application doesnt use ConfigServer, incase of Microservice applications only we need load the configuration from ConfigServer, so if this has been incorporated aspart of SpringApplication class, it would result in additional overhead
+
+We need to write additional code that would gets executed at the startup of the application before SpringApplication.run(Config.class, args), which is responsible for 
+1. invoking the CloudConfigServer and pulls the application configuration with which we need to create one ioc container, place this ioc container aspart of the ServletContext
+2. when we run SpringApplication.run(Config.class, args), the SpringApplication class before creating an ioc container, checks to see whether there exists an ioc container under ServletContext, if present, it creates child ioc container by nesting parent ioc container with which our application will be bootstrapped
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

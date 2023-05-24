@@ -1,0 +1,15 @@
+JEE Platform offers 2 main features
+1. cluster management
+	1.1 resource management = configuring the resources and distributing them across the cluster like connection pooling, jms servers etc
+	1.2 app deployments = deploying the application across the nodes of the cluster
+	1.3 monitoring
+	1.4 load balancing
+Microservices
+Not all the microservices are deployed across all the nodes of the cluster, so different nodes are deployed with different microservices and needs different resource configurations which cannot be accomplished using jee container
+
+2. cross-platform services
+even though microservices requires cross-platform services, not every microservice uses all the cross-platform services. different services requires different cross-platform features based on their nature of functionality. But an jee container has been pre-packaged with all the cross-platform services that makes them heavy weight
+
+so if we are deploying microservices on jee containers, even though we dont make use of all the features of the container, we still endup in spending huge cost in deploying and running the application 
+There are plenty of third-party libraries are available in the market, providing various cross-platform services which can be picked and choosen (pluggable), so instead of using jee platform we can make use of the third-party libraries in building these services in our application, keeping our application deployments light weight
+

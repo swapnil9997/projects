@@ -1,0 +1,111 @@
+What is an Monolithic application architecture?
+An application is built out of single sourcecode, which comprises of multiple modules where in each module may have inter-dependency between each other (through a direct classpath references)	, packaged together into a single deployable artifact and run on the jvm is called "monolithic application"
+	
+Circumstances:-
+1. if we want a team of developers to work, develop the entire application
+2. new people should be able to quickly ramp in understanding the wholistic picture of the application and becomes productive
+3. everyone in the team should be able to understand the entire system and should be able to work across any modules of the project
+4. if we want to achieve scalability by running multiple instances of the application across multiple computers
+
+What are the advantages of building the application based on monolithic application architecture:
+1. Easy to develop = Most of the existing tools and IDE are designed to support building monolithic application architecture
+2. Easy to deploy = since the application is delivered as an single packaged deployment, all we need to do is copy into the deployment directory of the server to run it
+3. Easy to scale = To scale the application, all that we need to do is just clone the environment to run the application on multiple machines
+
+
+In addition to the advantages, there are several dis-advantages are there with Monolithic application architecture
+1. overloaded IDE
+The larger the code base, the slower the IDE. everytime when we modify the sourcecode of the application, the IDE rebuilds the entire project including all the modules which takes huge amount of time and system resources in building the project which kills the development time and developers productivity
+2. overloaded Server Runtime
+The bigger the application is, it takes more time in deploying and startingup the application by the ServerRuntime. due to which during the development, the developer quite frequently modifies the code and wants to debug the code/verify changes, so he has repackage, redeploy and restart ServerRuntime, which takes lot of time to startup and kills the productivity again
+3. Modularity and reusability is difficult to achieve
+As the application is built out of the single sourcecode, identifying the modules and reusing the components across the modules becomes very complex for the developers. Most of the time when a developer needs some functionality rather than searching throught the existing components within the project, he would endup in creating new components which leads to code duplication and results in maintainability problems
+4. Large monolithic applications makes the developers feel afraid of working on the application, they often find it complex to understand the modules due to lack of knowledge interms of functional/technical. thus degrades the quality of the code to a greater extent
+5. Scaling the application becomes very difficult
+1. Monolithic application architecture supports only horizantal scaling, which means the whole system has to be scaled at one shot by deploying them on multiple computers. we cannot scaleup a single module for whom the traffic or load is high
+2. Due to horizontal scaling the cost of scalability increases quite high
+3. different modules requires different computing resources, for eg. few modules might be cpu bounded modules wherein they require more amount of cpu to perform operations. few other modules could be memory-intensive modules which requires more memory. Since we package all the modules as a single deployment, we cannot cater and allocate resources to each module based on their nature/requirement.
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

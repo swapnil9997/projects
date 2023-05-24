@@ -1,0 +1,10 @@
+CloudConfig Server:
+Cloud ConfigServer is used for centralizing and distributing the configuration information of the microservices over the network. In order to distribute the configuration across the network, we need to build a ConfigServer Endpoint that takes the request from microservice application and dispatches the service configuration (yml/properties) as a response back to the application
+
+We need to configure the ConfigServer Endpoint with git configrepo url where it can locate the configuration from, so that during the bootup the ConfigServer Endpoint can load the configuration and store in cache. 
+Each Microservice application should have an unique name to identify itself, whenever a microservice requests the configuration by going to the ConfigServer Endpoint, they should produce the name of microservice application who is looking for the configuration.
+In addition, the configuration pertaining to each microservice application should be written in applicationName.yml|properties then only our ConfigServer Endpoint can take the applicationName and look for corresponding configuration file and dispatch it as a response to the microservice application
+
+its not just we need the ConfigServer Endpoint, everyone who is building an microservice application requires more/less a similar ConfigServer Endpoint that distributes configuration information over the network to microservices, so Instead of we building the ConfigServer Endpoint application, the Spring develpers aspart of Spring Cloud module has provided Spring Cloud ConfigServer, that can be directly used.
+
+

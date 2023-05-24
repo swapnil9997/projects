@@ -1,0 +1,26 @@
+The openfeign 3.x supports discovery client and loadbalancing as well. To enable loadbalancing the requests to the server we need add okHttp library 
+
+<dependency>
+	<groupId>io.github.openfeign</groupId>
+	<artifactId>feign-okhttp</artifactId>
+</dependency>
+
+along with that for discovery through eureka server we should add 
+1. eureka server configuration in application.yml
+eureka:
+	client:
+		register-with-eureka: false
+		fetch-registry: true
+		service-url:
+			defaultZone: http://localhost:8889/eureka
+feign:
+	okhttp:
+		enabled: true
+			
+2. on the Application class we need to enable discovery client by annotating @EnableDiscoveryClient
+3. on the interface we should not specify the url and the client name should be same as the "Service Name" in the discovery registry
+
+@FeignClient(name="INSURANCE-SERVICE")
+interface PolicyService {
+}
+	

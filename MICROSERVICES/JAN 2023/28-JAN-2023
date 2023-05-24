@@ -1,0 +1,7 @@
+How to integrate microservice application with cloud configserver?
+Aspart of an Microservice application we should not package the application configuration, since a change in the configuration will leads to rebuild, repackage and redeploy the application across the instances we should avoid it
+
+Instead our Microservice application should pull the configuration information from Cloud ConfigServer during the bootup using which our application should run, how can this be achieved?
+	
+
+	

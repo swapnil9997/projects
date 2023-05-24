@@ -1,0 +1,139 @@
+class MessageWriter {
+	IMessageConverter messageConverter;
+	
+	void writeMessage(String message) {
+		String cMessage = nulll;
+				
+		cMessage = messageConverter.convert(message);
+		System.out.println(cMessage);
+	}
+	public void setMessageConverter(IMessageConverter messageConverter) {
+		this.messageConverter = messageConverter;
+	}
+}
+
+interface IMessageConverter {
+	String convert(String message);
+}
+class HTMLMessageConverterImpl implements IMessageConverter {
+	String convert(String message) {
+		return "<html><body>"+message+"</body></html>";
+	}
+}
+class PDFMessageConverterImpl implements IMessageConverter {
+	String convert(String message) {
+		return "<pdf>"+message+"</pdf>";
+	}
+}
+class Test {
+	public static void main(String[] args) {
+		MessageWriter messageWriter = new MessageWriter();
+		IMessageConverter messageConverter = new HTMLMessageConverterImpl();
+		messageWriter.setMessageConverter(messageConverter);
+		
+		messageWriter.writeMessage("Welcome to Strategy Design Pattern");
+	}
+}
+
+
+whenever we want to switch from HTML to PDF Message Converter we need to modify the code in Test class, which requires recompilation, repackaging, redeploy or restart the application. Which involves huge time and cost of qa verification and delivery of the application.
+	
+How can we avoid this?
+In case if we are writing the classname of one class inside another java class, we run into this problem, so avoid writing java classnames inside another javaclasses 
+write them inside a non-java file, read them and create the object
+
+we can write the classnames of the java classes inside the properties file. properties file is an text file only written in key=value pair in nature. so that we can assign one identifiable key for each class and access the classname using key
+	
+appClasses.properties
+---------------------
+messageWriter.class=com.sdp.beans.MessageWriter
+messageConverter.class=com.sdp.beans.HTMLMessageConverterImpl
+
+
+class ObjectFactory {
+	public static Object createObject(String lClassname) {
+		Properties props = new Properties();
+		props.load(new FileInputStream(new File("d:\\appClasses.properties")));
+		
+		String fqnClass = props.getProperty(lClassname);
+		
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

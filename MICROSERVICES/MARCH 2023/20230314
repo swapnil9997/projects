@@ -1,0 +1,56 @@
+How to work with programmatic approach in Spring cloud gateway?
+We need to configure Gateway Route in mapping the request to the proxied Service, for this Spring cloud gateway has provided bunch of class 
+1. Route
+2. Predicate
+3. GatewayFilter
+
+There are several implementations of Predicate and GatewayFilters are available. So, inorder to route the traffic to the Microservice application we need write the code for constructing the Route object by populating the respective implementations of Prediate and Filters.
+	
+creating these objects manually and populating them is very complex, so Spring cloud Gateway has provided an Builder class called RouteLocatorBuilder, by using the fluent builder api we can quickly construct the Route objects
+RouteLocatorBuilder is instantiated by the AutoConfiguration class which we can directly use for populating the Route configurations into it
+
+@SpringBootApplication
+public class AthenaCloudGatewayApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(AthenaCloudGatewayApplication.class, args);
+	}
+	
+	@Bean
+	public RouteLocator routeLocator(RouteLocatorBuilder builder) {
+		return builder.routes().route("membermgmt_route", r-> r.path("/membermgmtservice/**").uri("lb:http://MEMBER-MGMT-SERVICE").build();
+	}
+}
+
+spring:
+	cloud:
+		gateway:
+			routes:
+				- id: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

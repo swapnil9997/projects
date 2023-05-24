@@ -1,0 +1,124 @@
+Relience4J
+1. CircuitBreakerConfiguration
+2. RateLimiter
+3. TimeLimiter
+4. BulkHeadProvider
+5. Retry
+
+
+@Component
+class MemberMgmtApiService {
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	@Autowired
+	private CircuitBreakerFactory circuitBreakerFactory;
+	
+	public MemberInfo getMember(int memberNo) {
+		CircuitBreaker cb = null;
+		
+		cb = circuitBreakerFactory.create("slow");
+		return cb.run(()-> {
+			UrlComponentBuilder builder = UriComponentBuilder.fromUriString("http:....");
+			URL resourceURI  = builder.build(pathVariables);
+			return restTemplate.getForObject(resourceURI, MemberInfo.class);
+		});
+	}
+}
+
+@SpringBootApplication
+@EnableDiscoveryClient
+class CBSpringApplication {
+	public static void main(String[] args) {
+		ApplicationContext context = Spring.Application.run(CBSpringApplication.class, args);
+		MemberMgmtApiService service = context.getBean(MemberMgmtApiService.class);
+		MemberInfo memberinfo = service.getMember(1);		
+	}
+	
+	@LoadBalanced
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
+
+	@Bean
+	public Customizer<Resilience4JCircuitBreakerFactory> circuitBreakerFactoryCustomizer() {
+		return new Customizer<Resilience4JCircuitBreakerFactory>() {
+			public void customize(Resilience4JCircuitBreakerFactory factory) {
+				
+			}
+		}
+	}
+}
+
+
+@Component
+class Resilience4JCircuitBreakerFactoryCustomizer implements Customizer<Resilience4JCircuitBreakerFactory> {
+	public void customize(Resilience4JCircuitBreakerFactory factory) {				
+		factory.configure(new Consumer<Resilience4JConfigBuilder>() {
+			void accept(Resilience4JConfigBuilder builder) {								builder.circuitBreakerConfig(CircuitBreakerConfig.custom().failureThreshold()).waitDurationInOpenState(Duration.ofSeconds(2)).slidingWindowSize(2).build()).timeLimiterConfig(TimeLimiterConfig.custom().timeoutDuration(Duration.ofSeconds(3).build());
+				
+			}
+		, "slow");		
+	}
+}
+
+
+Resilience4JCircuitBreakerFactory
+- configure(Resilience4JCircuitBreakerConfiguration, id)
+	
+
+CircuitBreaker cb = circuitBreakerFactory.create("slow");
+
+	
+
+factory.configure(cbc1, "slow");
+factory.configure(cbc2, "speed");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

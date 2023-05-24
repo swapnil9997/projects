@@ -1,0 +1,68 @@
+Discovery Server/Registry
+In a Microservice environment, the services are scattered across the various different nodes of the cluster. All nodes of the cluster are not identical. In such case the client application doesnt know which services are running on which nodes of the cluster inorder to consume or access them. To help the client application identify or discover these services, the discover server or registry comes into picture.
+	
+There are several third-party discovery engines are available in the market
+1. Eureka Server
+2. Hashicorp Consul
+3. Apache Zookeeper
+out of the above discovery servers eureka server is one of the most popular discovery registry used in the market.
+	
+Irrespective of the discovery server we are using, they should provide minimalistic features in registering and discovering the services, let us explore them.
+1. A discover server/registry should expose or provide an registration endpoint, so that each microservice during their bootup can register/publish themself with the discovery server to make themself discoverable
+2. Multiple instances of the Microservice will be deployed and running across the nodes of the cluster for high availability and scalability. while these instances are registered to the Discovery Server, the discovery server should not keep track of these instances as 2 different microservices, rather the Discovery Server should register these instances as replicas of the same service, so that when the client requested the information about the service, it returns all the replicas of the service to loadbalance the requests.
+3. The discovery server supports heartbeats in monitoring the service availability. each service periodically sends heartbeat information letting the health/liveliness of the service to discovery server. Incase for any given service, if the heartbeats are not received for an stipulated amount of time, the discovery server should retire/remove the service information from the registry not making the service discoverable to the client.
+4. The discovery server should support discovering the services based on the serviceName and their availability
+5. If a discovery has went down, the whole system becomes un-available, which is an single-point failure. To avoid this a discovery server should support master/slave architecture for high-availability in production environments.
+	
+Looks like every microservice application requires an discovery server build based on the above requirements in making the services discoverable, which seems to a common requirement, instead of we building by our own, there are lot of third-parties build and provided them as opensource projects to us like
+1. eureka server
+2. consul
+3. zookepeer
+
+all these discovery servers are built on java platform, so inorder to use them we need to configure them and deploy on the servlet container.
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

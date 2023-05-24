@@ -1,0 +1,158 @@
+#1
+Java Frameworks 
+1. Spring Framework with spring boot
+2. Hibernate & Jpa api
+3. Restful Services
+4. Java Microservices
+Duration: 6 Months, Fee: 13k 
+Fresh/New Batch: 26th December, 2022@7:00 am
+Timings: 7:00 am IST - 8:00 am IST [Monday - Saturday]
+
+#2 Devops With Aws
+Duration: 6-7 months, Fee: 12k
+New Batch: 1st week of January 2023
+Timings: 6:00 am IST - 7:00 am IST
+
+#3. AWS Cloudplatform
+Duration: 3 months, Fee: 6k
+New Batch: will be soon within a Month
+------------------------------------------------------------------------------------------------------------------------
+Java Microservices
+Duration: 20 - 25 days
+Timings: 8:00 am - 9:00 am [Monday - Sunday]
+Fee: 3k
+Note: Until 25th of this month: 7:00 am - 8:00 am, after that the class will be shifted to 8:00 am - 9:00 am IST
+Notes: live classroom notes will be shared to students on weekly basis including examples
+No recordings, no videos, no youtube, no facebook, no bell icon, no subscribe. If the students are found to be recording the sessions, you admission will be cancelled without any fee refund
+
+pre-requisite:-
+1. core java
+	1.1 streaming api
+	1.2 functional interfaces
+	1.3 lamdba
+	1.4 concurrency
+	1.5 i/o streaming	
+2. servlet/jsp api
+good and sound knowledge on servlet api is required, but no jsp
+3. Spring Framework
+	3.1 core
+	3.2 aop
+	3.3 jdbc
+	3.4 datajpa
+	3.5 mvc & restful services
+	3.6 tx	
+4. Spring Boot
+5. Restful Services
+
+Course Content
+----------------
+1. Concepts of Monolithic application architecture
+2. Concepts of Microservices application architecture
+3. Microservices Patterns
+	1. Data Consistency using Saga pattern
+		1.1 Choreography-based saga
+		1.2 Orchestration-based saga
+	2. API Composer
+	3. Command Query Responsiblity Segregation (CQRS)
+	4. Domain-Driven Design
+	5. Database per Service
+4. Implementation of MicroServices
+	1. Eureka Discovery Registry
+	2. Ribbon (Client-Side Loadbalancer) 
+	3. Spring Cloud Loadbalancer
+	4. Fegin
+	5. Spring Circuitbreaker
+	6. Spring CloudGateway
+	7. Resilience4j
+5. Spring Cloud
+	1. Spring Cloud Config Server
+	2. Spring Cloud Config Client
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

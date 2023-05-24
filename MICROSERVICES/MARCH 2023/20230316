@@ -1,0 +1,108 @@
+The Spring Cloud Gateway has provided lot of built-in / predefined filters that can be used for applying the pre/post processing logic before/after the request has been proxied to the Microservice / backend service. But the predefined filters provided by the Cloud Gateway may not sufficient for additional usecases like
+1. we want to check for oauth token before allowing the request to be forwarded to the backend service
+2. we want to perform logging of the request/response
+3. we want to implement caching of the response and reuse it for the subsequent requests
+For handling such functional aspects we need to write our own Filters, spring cloud gateway has not provided filters for everything.
+	
+How to work with creating our Filters to apply pre/post process of the proxied requests?
+There are 3 types of Filters are available for performing pre/post operations
+1. WebFilter = WebFilter is not part of Cloud Gateway, rather it is an Filter that can be applied for any WebFlux application and may be used for Spring Cloud Gateway aswell.
+	
+
+2. GlobalFilter 
+if we want to apply common pre/post processing logic for every request that is proxied through the cloud gateway then we need to use GlobalFilters
+
+3. GatewayFilter
+if we want to apply pre/post processing logic to a specific routes of the cloud gateway, then we need to use Gateway Filter
+
+
+1. GlobalFilter
+The Spring Cloud Gateway has provided an interface called GlobalFilter, we need to write our own implementation class implementing the GlobalFilter interface and override method filter(ServerWebExchange, GatewayFilterChain) in which we need to write pre/post processing logic
+
+
+@Component
+class GlobalHttpRequestResponseLoggingFilter implements GlobalFilter {
+	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+		Mono<Void> response = null;
+		// pre-processing
+		System.out.println("received request for the service: " + exchange.getRequest().getPath());
+		
+		response = chain.filter(exchange); // pass to the next filter -> target
+		
+		// post processing 
+		System.out.println("request path : " +exchange.getRequest().getPath() + " completed execution with status code: " + exchange.getResponse().getStatusCode());
+		
+		return response;
+	}
+}
+ 
+2. Gateway Filter
+The Gateway Filters are specific to the Route on which we are attaching and would be executed for that route only. We want to associate GatewayFilter for each route with different configuration from the another route.
+For eg..
+A CircuitBreakerGatewayFilter can be associated at different routes in Spring Cloud Gateway with different configurations attached to the Filter, for some routes want to apply CircuitBreakerGatewayFilter with "slow" configuration and for other routes we want to apply the Filter with "fast" etc
+From this we can understand, the object for the Gateway Filters are created per each Route level and are not global. The ioc container has to create the object of the GatewayFilter if given it has been associated to a Route otherwise should not.
+	
+	
+GatewayFilterFactory<Config>
+GatewayFilter
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

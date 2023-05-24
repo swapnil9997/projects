@@ -1,0 +1,41 @@
+What is the support of JEE platform in developing and delivering enterprise large scale monolithic applications?
+For every enterprise large scale application we need enterprise class-level services that are common across every application
+1. security
+A Jee api/application server has provided built-in support for implementing security for an application through javax.security api
+2. logging
+Every application server supports centralized logging
+3. monitoring
+4. cache management
+distributed caching support is provided by every jee application server
+5. clustering
+6. resource pooling (connection pooling)
+7. global transactions
+8. load balancing
+9. messaging
+JMS apis are supported by every jee server
+10. memory management
+11. schedulers
+12. auditing
+
+Instead the developing building these enterprise features, the jee platform itself has provided them
+1. either through api
+2. application server
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

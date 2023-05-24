@@ -1,0 +1,268 @@
+The CircuitBreakerFactory takes care of instantiating the object of CircuitBreaker with default configuration values, but while accessing the microservices the default configuration is not applicable.
+	
+There are few services which might be "slow" running services which requires higher response timeout interval and few microservices by nature would fail frequently and requires higher failure threshold, so we cannot use one CircuitBreaker object for accessing different microservices. we need different objects of CircuitBreaker with different configurations pertaining to the microservice we are accessing.
+	
+The CircuitBreakerFactory is creating the object of CircuitBreaker, so we need to pass the configuration as an input to the CircuitBreakerFactory asking him to create the object of CiruitBreaker
+
+For different vendors the configuration information with which the CircuitBreaker object should be created is different, so spring cloud has provided per each vendor one CircuitBreakerConfiguration
+
+For eg.. 
+For Resilience4J third-party library, spring cloud has provided Resilience4JCircuitBreakerConfiguration, similarly for Hystrix third-party library it has provided HystrixCircuitBreakerConfiguration 
+
+Now based on the library we are using we need to pick the appropriate configuration class instantiate it and populate the values, but to help us in quickly creating the object of the vendor configuration, the spring cloud has provided ConfigBuilder per each vendor.
+	
+for eg.. if we are using Resilience4J we need to use
+
+Resilience4JConfigBuilder builder = new Resilience4JConfigBuilder("slow");
+// populate the configuration values pertaining to Resilience4J vendor
+Resilience4JConfiguration configuration = builder.build();
+
+
+There are several classes in our client application in which we wanted to access different microservices, so all over these classes in our application we need to write the code for
+	1. instantiate the object of ConfigBuilder and populate the values
+	2. then using the builder create the object of CircuitBreakerConfiguration
+	3. pass the object of CircuitBreakerConfiguration to CircuitBreakerFactory and create the object of CircuitBreaker
+	
+looks like we endup in writing the same code across several classes in our application in repeatedly creating the CircuitBreaker object with same configuration,which leads to code duplication
+
+How to avoid this problem?
+since the CircuitBreakerFactory uses these configurations in instantiating the object of CircuitBreaker, let us populate all the different configurations with which we want to create different CircuitBreaker objects per different services and place them inside CircuitBreakerFactory with id per each configuration.
+	
+So that while creating the object of CircuitBreaker, i can ask CircuitBreakerFactory to instantiate the object with specific configuration by passing "id" of the configuration
+
+CircuitBreaker cb = circuitBreakerFactory.create("id");
+
+We are not creating the object of CircuitBreakerFactory, for populating the CircuitBreakerConfigurations at the time of instantiating it. the spring cloud autoconfiguration classes are taking care of configuring the CircuitBreakerFactory as a bean definition with only one "default" configuration.
+	
+How to customize the CircuitBreakerFactory that is created by the Spring Cloud AutoConfigurations, at the time of creating the object of it?
+That is where Customizer classes comes into picture
+
+
+interface Customizer<T> {
+	void customize(T t);
+}
+here T is the object that is instantiated through auto-configuration classes
+
+
+@Component
+class CircuitBreakerFactoryCustomizer implements Customizer<Resilience4JCircuitBreakerFactory> {
+	public void customize(Resilience4JCircuitBreakerFactory cbf) {
+	//	puplate the vendor specific configuration into Factory
+	}
+}
+
+What configurations we can populate into CircuitBreakerFactory?
+depends on the third-party library we are using
+
+There are multiple third-party libraries are available like
+1. Hystrix
+2. Resilience4J
+etc
+
+out of which the Resilience4J has too many features and is considered very powerful circuitbreaker implementation in the market. let us understand the features of Resilience4J to use it
+
+1. CircuitBreakerConfiguration = we can configure various threshold limits for implementing CircuitBreaker using Resilience4J
+The CircuitBreaker can be in one of three states
+1. OPEN         = requests are not allowed to remote services
+2. HALF_OPEN    = in HALF_OPEN state only certain number of requests are being allowed to the remote service and incase of failure, immediately circuit returns to OPEN state
+3. CLOSED       = allows requests to the remote service
+
+
+1. failureRateThreshold = defaultValue (50) = using this configuration property we configure the failure rate threshold in percentage
+
+2. slowCallRateThreshold = 100 = when the percentage of the slow calls is equal or greater than the threshold value, the circuit should transistion to open state
+
+3. slowCallDurationThreshold = 60000 (ms) = if the calls are taking more than the threshold, then it is considered as slow
+4. permitNumberOfCallsInHalfOpenState = 10 
+5. maxWaitDurationInHalfOpenState = 0 [ms] = wait in OpenState until the permitted calls completed execution
+6. slidingWindowType = COUNT_BASED / TIME_BASED
+
+#2. RateLimiter = RateLimiter helps us in limiting the number of requests to the remote service
+#3. TimeLimiter = how long the client has to wait for the response from the remote service 
+#4. BulkHeadProvider = Number of concurrent requests to be allowed to the remote service can be managed using BulkHeadProvider
+#5. Retry = In case of failure the spring retry automatically retries the request
+
+The Resilience4J project was built from the motivation of Hystrix and can consider it as next version of Hystrix.
+Now all these configurations we need to populate in Resilience4JCircuitBreakerConfiguration object using the help of ConfigBuilder.
+
+
+class Resilience4JConfigBuilder {
+	String id;
+	CircuitBreakerConfiguration circuitBreakerConfiguration;
+	TimeLimiterConfig timeLimiterConfig
+	RateLimiter rateLimiter;
+	Retry retry;
+	
+	
+	Resilience4JCircuitBreakerConfiguration build();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,66 @@
+There are lot of third-party circuitbreaker implementation libraries are available in the market
+1. Netflix Hystrix
+2. Resilience4J
+3. Sentinel
+4. Spring Retry
+
+we can use any of these vendor libraries for using CircuitBreaker in our application, but directly working with these libraries makes our application tightly coupled with that vendor, so switching from one vendor to another we need to rewrite the logic we wrapped around the vendor api classes
+
+So the spring cloud has provided Spring Cloud CircuitBreaker wrapper, by using the Spring Cloud CircuitBreaker we can work with any of the CircuitBreaker third-party implementations that are available. As of now it supports 2 libraries
+1. Resilience4J
+2. Retry
+
+Spring Cloud Circuit Breaker has provided an CircuitBreaker interface and one implemention per one third-party library. This implementation class is an wrapper implementation and it contains the logic for invoking the vendor provided circuit breaker api to enforce circuit breaker functionality for our application
+
+interface CircuitBreaker {
+	<T> T run(Supplier<T> toRun);
+	<T> T run(Supplier<T> toRun, Function<Throwable, T> fallback);
+}
+
+class Resilience4JCircuitBreaker implements CircuitBreaker {
+	io.github.resilience4j.circuitbreaker.CircuitBreaker circuitBreaker;
+}
+
+
+We need Spring Cloud provided implementation object of CircuitBreaker interface in our components of our application. To instantiate vendor specific CircuitBreaker implementation, the Spring has provided CircuitBreakerFactory this is an Abstract Factory.
+	
+abstract class CircuitBreakerFactory {
+	CircuitBreaker create(String id);
+}	
+
+For each implementation vendor, Spring Cloud has provided one implementation of Abstract Factory which takes care of instantiating the vendor api classes and wrap them into Spring Cloud CircuitBreaker vendor implementation object
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

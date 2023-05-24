@@ -1,0 +1,94 @@
+Java Microservices
+duration: 25 days (+/ 5-10 days)
+Timings: 8:00 am IST - 9:00 am IST (after the demos, the class will be shifted) [Monday -  Sunday]
+Fee: 3k
+No recordings, no youtube, if we find any students recording the sessions, their admission will be cancelled without fee refund
+Live classroom notes will be shared to the students on weekly basis (text/images)
+
+Pre-requisite
+1. core java [streaming api, lamdbas, functional interfaces, i/o streams]
+2. servlet api
+3. Spring Framework [core, aop, mvc, datajpa, tx]
+4. Spring Boot
+5. Restful Service
+
+email address: tech.sriman@gmail.com
+------------------------------------------------------------------------------------------------------------------------
+Course Content
+Brief Introduction to Microservices
+1. Monolithic application architecture
+How to develop monolithic applications in java
+	1.1 advantages
+	1.2 dis-advantages
+What is the role of jee in building monolithic applications
+
+2. Microservices application architecture	
+How are microservices different from monolothic application
+	2.1 advantages
+	2.2 dis-advantages
+What is the role of jee interms of building and delivering microservices applications
+How does microservices applications are deployed on real-world infrastructure
+3. Microservice identification and modularity
+4. Microservices patterns
+	4.1 api composer
+	4.2 cqrs
+	4.3 saga
+		4.3.1 choreography
+		4.3.2 archestrator
+	4.4 api gateway
+	4.5 database per service
+	4.6 service per domain
+5. How to implement microservices, what are the tools available for developing microservices using spring boot?
+	5.1 Spring Cloud
+		5.1.1 SpringCloud ConfigServer
+		5.1.2 SpringCloud ConfigClient
+	5.2 Netflix Eureka Server (HA)
+	5.3 Ribbon (Client-Side Loadbalancer) & Spring Cloud Loadbalancer
+	5.4 Spring Circuit Breaker (Resilience4j) (Hystrix deprecated)
+	5.5 Feign Client api (declarative rest api)
+	5.6 Spring Cloud Gateway
+6. OAuth Security
+7. Kafka (an example will be demonstrated)
+8. 12 factor principles
+-----------------------------------------------------------------------------------------------------------------------
+What are Microservices?
+Microservices is not an api/library or not even a programming language, its a methodology	or an architectural style of building enterprise large-scale complex business systems. The microservices architecture has provided recommendations, guidelines and design patterns that should be followed in building enterprise large-scale complex systems
+
+In-Short:
+bunch of design patterns and guidelines put together in building a large-scale complex business application is called "microservices"
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+

@@ -1,0 +1,52 @@
+Spring Cloud ConfigServer:
+How to develop an Spring Cloud ConfigServer application?
+To centralize and distribute the microservices configurations over the network to the microservices applications, the spring cloud has provided Cloud ConfigServer, which is nothing but an HttpEndpoint
+
+In order to host the endpoint
+1. we need to build an spring mvc application
+2. configure mvc components like DispatcherServlet, ContextLoaderListener, HandlerMapping, MessageConverters etc
+3. Need to configure ConfigServer Endpoint as a bean definition and add necessary mappings for routing the request to the Endpoint
+4. package and deploy the application on the Servlet Container
+	
+From the above we can understand even though Spring Cloud people provided the endpoint we need to write lot of glue code in hosting the Endpoint instead we can make use of Spring Boot
+	
+By using Spring Boot + Spring Cloud we can quickly host the ConfigServer Endpoint
+1. setup a spring boot application with starter dependencies
+2. DispatcherServlet, ContextLoaderListener will be configured by AnnotationConfigServletWebServerApplicationContext
+3. HandlerMapping, MessageConverters are configured through AutoConfigurations
+4. Application is packaged as boot Jar and deployed on embedded tomcat server
+
+The only thing we need to do is configure the ConfigServer Endpoint in our application to allow it to recieve the request.
+If we are configuring ConfigServer Api in our application manually, we need to takecare of the dependent components that are required for ConfigServer to be available or injected inorder to configure ConfigServer as bean definition
+Thus making the usage of ConfigServer difficult, so to overcome that Spring Cloud has provided AutoConfiguration which can be triggered through @EnableConfigServer annotation
+
+
+How to develop an ConfigServer Application?
+1. configrepo (either locally or on github repo)
+2. setup spring boot application (with all required starter dependencies)
+3. create an spring application class, annotate with @EnableConfigServer
+4. in application.yml write corresponding configuration in injecting configRepo location to ConfigServer Endpoint
+
+Instead of using a local directory as a config repo we can use github repository as well, but incase of a private repository we need to generate patToken and construct the URL with https://username:pathToken@repo.git and pass it as an input to config server 
+
+https://gitUsername:patToken@github.com/techsriman/athenaconfigrepo.git
+https://techsriman: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@github.com/techsriman/athenaconfigrepo.git
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

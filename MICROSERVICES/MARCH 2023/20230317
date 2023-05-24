@@ -1,0 +1,157 @@
+There are 2 types of filters are there in spring cloud gateway
+1. Global Filter = will be applied for all the routes that are proxied through the cloud gateway. if we want to apply common pre/post processing logic for each route that is proxied through the gateway then we need to use Global Filter
+
+
+2. Gateway Filter
+Gateway Filters are attached to the routes and will be applied to those specific routes to which those are bounded, if we want to apply common pre/post processing logic to few or specific routes that are proxied through the gateway then we need to use GatewayFilter
+
+1. Gateway Filters are scoped to the Route to which those are attached.
+2. when we configure a GatewayFilter for a route, we bind configuration to the GatewayFilter stating with which configuration the Filter should be executed for that route. which means the GatewayFilters are populate with configuration specific to the route
+3. upon receiving the request, the GatewayHandlingMapping has to identify the GatewayFilters associated to the route that has been matched based on predicates, then it should instantiate the object of the GatewayFilters associated to that route by passing the Configuration and use them for perform pre/post logic for that route.
+	
+For each GatewayFilter there will be an GatewayFilterFactory, that takes the Gateway Configuration and instantiates and returns the object of GatewayFilter to be used
+
+There are 3 components are there in creating an GatewayFilter
+1. GatewayFilter
+2. GatewayFilterFactory
+3. Gateway Configuration
+
+
+let us write an gateway filter that adds request headers while proxying/routing the requests to the downstream applications.
+
+#1. we need an configuration class, that acts as an input for GatewayFilter for performing operation
+class HeaderConfig {
+	private String name;
+	private String value;
+	// setters & getters
+}	
+
+#2. GatewayFilter
+
+class AddRequestHeaderGatewayFilter implements GatewayFilter {
+	private HeaderConfig headerConfig;
+	
+	public AddRequestHeaderGatewayFilter(HeaderConfig headerConfig) {
+		this.headerConfig = headerConfig;		
+	}
+	
+	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+		Mono<Void> response = null;
+		
+		exchange.getRequest().addRequestHeader(headerConfig.getName(), headerConfig.getValue());
+		response = chain.filter(exchange); // invokes the downstream application
+		
+		return response;
+	}	
+}
+
+#3. GatewayFilterFactory
+
+@Component
+class AddRequestHeaderGatewayFilterFactory extends AbstractGatewayFilterFactory<HeaderConfig> {
+	public AddRequestHeaderGatewayFilterFactory() {
+		super(HeaderConfig.class);
+	}
+	public GatewayFilter apply(HeaderConfig headerConfig) {
+		AddRequestGatewayFilter gatewayFilter = new AddRequestGatewayFilter(headerConfig);
+		return gatewayFilter;
+	}
+}
+
+@SpringBootApplication
+public class AthenaGatewayApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(AthenaGatewayApplication.class, args);
+	}
+}
+
+spring:
+	cloud:
+		gateway:
+			routes:
+				- id: membermgmtroute
+					uri: "lb:http://MEMBER-MGMT-SERVICE"
+					predicate:
+						- Path="/membermgmtservice/**"
+					filter:
+						- AddRequestHeader
+							args:
+								name: x
+								value: y
+								
+								
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+			
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

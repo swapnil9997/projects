@@ -1,0 +1,306 @@
+OpenFeign
+Spring Cloud OpenFeign is an declarative client library that can be used for accessing the microservices or rest endpoints without writing the code
+
+In general when we are invoking an microservice or rest endpoint we need to write the code for invoking the api by passing
+aspart of the request:
+	1. query parameter
+	2. path parameter
+	3. matrix parameter
+	4. headers
+	5. cookies
+	6. request body
+and write the code for collecting the response from http response as 
+	1. response headers
+	2. status code
+	3. response body
+	
+In our application for each api/microservice we want to invoke we end up in writing one invoker class, in each invoker class we write repeatitive logic in invoking the api, where only the request parameters/inputs and response outputs would change.
+	
+Instead of it we can write an generic HttpInvoker class, that takes the necessary inputs in invoking an api and returning the response as below.
+	
+@Component
+class HttpInvoker {
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	public Object invokeGet(String requestURL, Map<String, String> pathVariables, Class<?> responseType) {
+		URI requestURI = UriComponentBuilder.fromUriString(requestURL).build(pathVariables);
+		return restTemplate.getForObject(requestURI, responseType);
+	}
+	
+	
+	public Object invokeGet(String requestURL, Map<String, String> pathVariables, Map<String, String> queryParams, Class<?> responseType) {
+		UriComponentBuilder builder = UriComponentBuilder.fromUriString(requestURL);
+		for(String paramName: queryParams.keySet()) {
+			builder.queryParam(paramName, queryParams.getParameter(paramName));
+		}
+		URI requestURI = builder.build(pathVariables)
+		return restTemplate.getForObject(requestURI, responseType);
+	}	
+}
+
+In the above class for each combination of inputs/outputs we need to write methods invoking the apis. Now we can use this class without Client classes in invoking the api
+	
+@Component	
+class PolicyInvoker {
+	@Autowired
+	HttpInvoker httpInvoker;
+	
+	public PolicyDetails getPolicy(int policyNo) {
+		PolicyDetails policyDetails = null;
+		String baseURI = "http://PHARAMACY-SERVICE/policy/{policyno}/details";
+		Map<String, String> pathVariables = new HashMap();
+		pathVariables.put("policyno", policyNo);
+		
+		policyDetails = httpInvoker.invokeGET(baseURL, pathVariables, PolicyDetails.class);
+		return policyDetails;				
+	}
+}	
+	
+In the client program above we are writing the code for cooking up the data and invoking the HttpInvoker class, which seems to be redundantly written across all the client programs
+How to avoid writing the redundant logic in preparing the data and invoking the HttpInvoker class
+	
+#1	
+representing the remote api and methods we want to access let us define an interface
+interface PolicyService {
+	PolicyDetails getPolicy(int policyNo);
+}	
+
+interface MemberManagementService {
+	MemberDetails getMember(int memberNo);
+}
+
+endpoint-config.xml
+--------------------
+<httpClients>
+	<httpClient interface="PolicyService" baseURI="http://PHARAMACY-SERVICE/policy">
+		<httpInvocation name="getPolicy" httpMethod="GET" subResourceURI = "/{policyNo}/details" responseType="PolicyDetails">
+			<parameter name="policyNo" type="PathVariable"/>
+		</httpInvocation>
+	</httpClient>
+	<httpClient interface="MemberManagementService" baseURI="http://MEMBER-MGMT-SERVICE/member">
+		<httpInvocation name="getMember" httpMethod="GET" subResourceURI="/{memberNo}/details" responseType="MemberDetails">
+			<parameter name="memberNo" type="PathVariable"/>
+		</httpInvocation>
+	</httpClient>
+</httpClients>
+
+whenever we invoke the method on the interface, there should be some who reads the corresponding endpoint configuration and invoke the respective api service. 
+	
+we can write the code for invoking the api based on the endpoint configuration whenever we invoke the methodon the interface by using runtime proxy libraries
+	
+	
+@Component
+class HttpInvocationAdvice implements MethodInterceptor {
+	@Autowired
+	private HttpInvoker httpInvoker;
+	
+	public Object invoke(MethodInvocation methodInvocation) {
+		String methodName = null;
+		Object[] args = null;
+		String baseURL = null;
+		Map<String, String> pathVariables = null;
+		Map<String, String> queryParams = null;
+		
+		
+		methodName = methodInvocation.getMethod().getName();
+		args = methodInvocation.getArguments();
+		targetClass = methodInvocation.getTarget();
+		
+		// read the endpoint-config.xml
+		identify the HttpClient we need to invoke, from which derive httpInvocation
+		requestURL = baseURL + subResourceURL;
+		if(httpInvocation.hasPathVariables) {
+			pathVariables = new HashMap();
+			pathVariables.put(httpInvocation.getParameters()[0].name, args[0]);
+		}
+		return httpInvoker.invokeGET(requestURL, pathVariables, responseType);
+	}
+}
+
+From the above we can understand if we have 10 microservices to be invoked we just need to write 10 interfaces with configuration/metadata attached, so that whenever we invoke the interface method, the runtime proxy attached to the interface takes care of reading the associated metadata in invoking the endpoint and getting the response
+	
+Instead of we writing the HttpInvoker, HttpInvocationAdvice class in reading the associated metadata for each interface and invoking the microservices, the OpenFeign api has provided these components. So for each endpoint or microservice we want to invoke, we only just need to define
+1. interface
+2. configuration associated to that interface, representing the microservice/endpoints we want to invoke
+and openfeign supports writing this configuration using annotations for simplified programming rather than writing xml configuration, and we can annotation the interface/methods using spring mvc annotations itself
+
+For eg.. for PolicyService to invoke we need to define the interface with annotations as below
+	
+@FeignClient(url="http://PHARAMACY-SERVICE/policy")	
+interface PolicyService {
+	@GetMapping(value="/{policyNo}/details", produces = {MediaType.APPLICATION_JSON_VALUE})
+	PolicyDetails getPolicy(@PathVariable("policyNo") int policyNo);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,154 @@
+There are lot of inbuilt predicates and Gateway Filters are provided by the Spring Cloud Gateway, let us explore few of them
+Predicates:
+1. AfterRoute
+2. BeforeRoute
+3. BetweenRoute
+4. CookieRoute
+5. HeaderRoute
+6. HostRoute
+7. MethodRoute
+8. PathRoute
+9. QueryRoute
+10. RemoteAddressRoute
+11. WeightRoute
+
+1. Method Predicate
+spring:
+  cloud:
+    gateway:
+			routes:
+				- id: membermgmt_route
+					uri: lb:http://MEMBER-MGMT-SERVICE
+					predicates:
+						- Path="/membermgmtservice/**"
+						- Method=GET
+					filters:
+						- RewritePath /membermgmtservice(?<segment>/?.*),$\{segment}
+2. Query Predicate
+spring:
+  cloud:
+    gateway:
+			routes:
+				- id: membermgmt_route
+					uri: lb:http://MEMBER-MGMT-SERVICE
+					predicates:
+						- Path="/membermgmtservice/**"
+						- Query=env,test
+					filters:
+						- RewritePath /membermgmtservice(?<segment>/?.*),$\{segment}
+
+3. Header Predicate
+spring:
+  cloud:
+    gateway:
+			routes:
+				- id: membermgmt_route
+					uri: lb:http://MEMBER-MGMT-SERVICE
+					predicates:
+						- Path="/membermgmtservice/**"
+						- Header=env,test
+					filters:
+						- RewritePath /membermgmtservice(?<segment>/?.*),$\{segment}
+
+Filters:
+Filters are used for performing pre/post processing logic on the request or response that can be commonly applied to all the Routes or to a group of Routes aswell. The Spring Cloud Gateway has provided inbuilt Filters that can be used for modifying the request/response while processing.
+	
+1. AddRequestHeader GatewaFilter
+2. AddRequestParameter
+3. AddResponseHeader
+4. CircuitBreaker
+5. FallbackHeaders
+7. MapRequestHeader
+8. PrefixPath
+9. PreseveHostHeader
+10. ReqeustRateLimiter
+11. RedirectTo
+12. RemoveRequestHeader
+13. RewritePath
+14. RewriteLocation
+15. SetResponseHeader
+16. SetStatus
+17. StripPrefix
+
+
+1. Add Request Header
+spring:
+  cloud:
+    gateway:
+			routes:
+				- id: membermgmt_route
+					uri: lb:http://MEMBER-MGMT-SERVICE
+					predicates:
+						- Path="/membermgmtservice/**"
+						- Header=env,test
+					filters:
+						- RewritePath /membermgmtservice(?<segment>/?.*),$\{segment}
+						- AddRequestHeader referrer, gateway
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

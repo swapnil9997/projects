@@ -1,0 +1,116 @@
+What is a monolithic application architecture?
+An application is built out of an single sourcecode project, since it is an very large enterprise application we broke the application into several modules (module refers to sub-projects). Each of the modules may refer the other modules directly through classpath reference and the entire application is build, packaged as a single deployable artifact and is delived to run in one jvm.
+	
+Always a monolithic application is build into a single deployable artifact and deployed on a server runtime, since it has only one layer/artifact is is called "Monolithic" application
+Characteristics:
+1. single sourcecode
+2. inter-dependency between the modules through classpath references
+3. single deployable artifact
+
+Monolithic application architecture
+Problem statement:
+We want to develop an enterprise large scale application, which comprises of several modules belongs to various different functionalities and these are logically related to each other and should work together. Our application should support different types of clients like desktop browsers, mobile browsers and native mobile application to use the functionality of our system. In addition we want third-parties or partners to integrate their business application with our system.
+
+The application should be integratable with other applications through webservices or via messaging brokers and should support data exchange interms of XML,JSON or HTML etc
+
+To support building such an application that caters the needs of different clients in serving various functionalities we can use monolithic application architecture
+
+There are few circumstances or context under which we need to build the application based on monolithic application architecture:
+1. we want a team of developers to work on development of the application
+2. since the whole application is built out of single sourcecode, everyone in the team can understand the entire application and can easily derive the module dependencies and how those are working together. so the people in team can work across any of the modules of the project
+3. The new members added to the team can quickly understand the holistic view of the system and modules and their dependencies since it is build out of single source and can become quickly productive and contribute across the modules of the project
+4. it we want to achieve scalability and high availability by deploying the multiple instances of the application across multiple machines
+
+What are the advantages of building applications based on monolithic application architecture?
+1. Easy to develop
+The IDES and tools available are designed to support development of monolithic applications, so a developer can build the application quickly
+2. Easy to deploy
+Since the application is packaged into one single deployable artifact as a war/ear the only thing we need to do to deploy and run the application is just copy the artifact into the server runtime and run it
+3. Easy to scale
+To scale the application we just need to clone the existing environment, so that we can run the application on multiple machines quickly
+
+Along with advantages we have quite a number of dis-advantages are also there in building applications based on monolithic application architecture
+1. overloaded IDE
+The larger the code base the slower the IDE. every code change we make in the sourcecode of the project, IDE has to rebuild the entire project and all of the modules which takes huge amount of time and cpu and kills the developers productivity in building the application.
+	
+2. overloaded server runtime
+The larger the application, it takes more time for deploying and starting the application by the server runtime. The developer during development will modify the sourcecode and want to test/debug his changes. so everytime when he modifies the sourcecode, he has to rebuild, repackage and redeploy and start the server runtime. since the server runtime takes more time in bringing up the application, the developer most of the time endup in waiting for testing his changes which eventually kills the productivity of the developer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
