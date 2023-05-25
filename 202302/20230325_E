@@ -1,0 +1,101 @@
+JMS Message
+1. Horizontal scaling
+2. Transactional
+3. No Streaming capabilities
+
+Kafka
+Kafka is an opensource distributed messaging system used for publishing and subscribing the messages based on fault-tolerant messaging system. It is fast, scalable and distributed by design.
+	
+Topic:
+Topic is an data structure in which the messages being published by the publisher are stored and forwarded to topic subscribers. In each topic we can create partitions, and the messages are stored aspart of the partitions of the topic
+
+Few notable things about Topic:
+1. when a publisher published a message to a topic, the message will be distributed and stored across the partitions of the topic
+2. a publisher can publish a message to specific partition within the topic using message key
+3. all the messages within the topic are delivered in FIFO order, so order of delivery of the messages are guaranteed within the partition
+4. the order of delivery of messages across the partitions within the topic is not guaranteed
+
+Brokers:
+A Computer or a container running with Kafka process. He manages the Partitions of a Topic and handles write and reads requests. Manages replication of Partitions etc
+
+Partitions within a Topic are distributed across the Brokers of the Kafka Cluster. There are 2 types of brokers are there
+1. bootstrap broker      
+2. Replicas/Node brokers
+
+
+Publisher:
+Publisher is a program connects to the Broker of the Kafka Cluster and publishes the messages into the Partition of a Topic within the cluster.
+	
+Subscriber: is a program listens for messages from a Topic on the cluster to process the messages.
+	
+How to download and install Kafka?
+1. download the latest tar.gz version of kafka from here
+https://kafka.apache.org/downloads
+
+2. extract the zip file into kafka_2.13-3.4.0/
+	
+3. To start the kafka server we need to run the zookeeper server
+zookeeper is an service discovery engine through which a kafka broker gets registered and discovered by the other brokers on the cluster.
+The default properties for zookeeper server are stored under kafka_2.13-3.4.0/config/zookeeper.properties
+$HOME/kafka_2.13-3.4.0/bin/zookeeper-server-start.sh $HOME/kafka_2.13-3.4.0/config/zookeeper.properties
+
+4. start the kafka server
+$HOME/kafka_2.13-3.4.0/bin/kafka-server-start.sh config/server.properties
+
+5. we can create a new topic through kafka cli and see the contents of the topic
+kafka_2.13-3.4.0/bin/kafka-topics.sh --create --topic gpsTopic --bootstarp-server localhost:9092
+kafka_2.13-3.4.0/bin/kafka-topics.sh --describe --topic gpsTopic --bootstarp-server localhost:9092
+	
+6. How to publish messages into the Topic?
+we need to write a publisher program to publish messages into the topic, but kafka has provided an CLI for publishing the messages into the topic 
+
+kafka_2.13-3.4.0/bin/kafka-console-publisher.sh --topic gpsTopic --bootstrap-server localhost:9092
+The above command waits for the input we want to publish into the topic. once we are done in writing the message, we need to press Ctrl + C to send the message
+
+7. How to read the events/messages from the topic
+kafka_2.13-3.4.0/bin/kafka-console-consumer.sh --topic gpsTopic --bootstrap-server localhost:9092 --from-beginning
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

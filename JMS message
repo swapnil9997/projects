@@ -1,0 +1,32 @@
+JMS message
+1. Horizontal scaling
+2. Transactional
+3. No Streaming capabilities
+
+Kafka
+ Kafka is an opensource distributed messaging system used for publishing and subscribing the messages based on fault-tolerant messaging system. It is fast, scalable and distributed by design.
+
+ Topic: 
+ Topic is an data structure in which the messages being published by publisher are stored and forwarded to subscribers. In each topic we can create partitions, and the messages are stored as part of the partitions of the topic.
+
+Few notable things about topic: 
+	1. when a publisher pubblishes message to the topic, the message will be distributed and stored across the partitions of the topic 
+	2. a publisher can publish a message to  a specific topic withtin the topic using message key.
+	3. all the messages wtithin the topic are delivered in FIFO order, so order of delivery of the messages is guaranteed within the partition.
+	4. The order of delivery of messages across the partitions within the topic is not guranteed.
+
+	Brokers: 
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
