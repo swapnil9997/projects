@@ -1,0 +1,46 @@
+package com.venkat.records;
+
+import java.util.LinkedList;
+import java.util.List;
+
+public class RecordDemo {
+	
+	record Range(int begin, int end, List<Integer> values) {
+		
+		Range(int begin, int end, List<Integer> values ) {
+			this.begin = begin;
+			this.end = end;
+			this.values= List.copyOf(values);// creates immutable copy of list 
+		}
+	}
+	
+	record Range1(int begin, int end) {
+		
+		Range1(int begin, int end){
+			if(end < begin) {
+				throw new IllegalStateException("End should be greater than begin");
+			}
+			this.begin = begin;
+			this.end  = end;
+		}
+	}
+	
+	public static void main(String[] args) {
+		LinkedList<Integer> list = new LinkedList<>();
+		list.add(1);
+		list.add(4);
+		Range range = new Range(0,4,list);
+		System.out.println("range = " + range);
+		System.out.println("begin = " + range.begin());
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+}

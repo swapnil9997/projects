@@ -1,0 +1,14 @@
+package com.venkat.records;
+
+public class RecordDemo {
+	
+	record Range(int begin, int end) {
+		
+	}
+	
+	public static void main(String[] args) {
+		Range range = new Range(0,4);
+		System.out.println("range = " + range);
+		System.out.println("begin = " + range.begin());
+	}
+}
