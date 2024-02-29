@@ -7,8 +7,8 @@ What are the dis-advantages or drawbacks of developing an application based on m
 	1. supports only horizantal scaling
 	2. cannot distribute system resources across the modules of the application based on their requirement
 	3. cost of scalability is quite high
-6. we cannot achieve continous integration and continous deployment due to its huge in size
-7. we cannot scaleup the development team
+6. we cannot achieve continuous integration and continous deployment due to its huge in size
+7. we cannot scale the development team
 	if application grows bigger we need more resources to work on it, but we cannot manage them all at once so we need to break them into teams
 	1. if the teams are working independently on each module, ensuring the compatibility between the deliveries of these teams are very difficult
 	2. one team has to wait for other teams to complete their development to have the release to be taken place
